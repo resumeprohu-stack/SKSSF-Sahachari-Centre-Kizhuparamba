@@ -16,14 +16,6 @@ export default function Home() {
           priority
         />
         <div className="absolute inset-0 bg-black/50 z-10"></div>
-        <div className="absolute top-4 left-4 z-20 flex gap-2">
-          <Link href="https://www.facebook.com/profile.php?id=100073117396245" target="_blank" aria-label="Facebook Page" className="inline-flex items-center justify-center h-10 w-10 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground">
-            <Image src="/fb.png" alt="Facebook Page" width={20} height={20} />
-          </Link>
-          <Link href="https://www.facebook.com/profile.php?id=100073117396245" target="_blank" aria-label="Facebook Page" className="inline-flex items-center justify-center h-10 w-10 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground">
-            <Image src="/fb.png" alt="Facebook Page" width={20} height={20} />
-          </Link>
-        </div>
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-4">
           <h1 className="text-2xl md:text-3xl font-bold font-headline tracking-tight">
             SKSSF
