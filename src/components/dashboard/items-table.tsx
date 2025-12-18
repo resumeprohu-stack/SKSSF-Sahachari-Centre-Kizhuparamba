@@ -35,6 +35,8 @@ interface ItemsTableProps {
 
 export function ItemsTable({ items, onEdit, onDelete, onReturn }: ItemsTableProps) {
   const pathname = usePathname();
+  const isPublicView = pathname === '/items';
+
   const isOverdue = (dateString?: string) => {
     if (!dateString) return false;
     return new Date(dateString) < new Date();
@@ -49,9 +51,11 @@ export function ItemsTable({ items, onEdit, onDelete, onReturn }: ItemsTableProp
           <TableHead>Status</TableHead>
           <TableHead className="hidden md:table-cell">Issue Date</TableHead>
           <TableHead className="hidden md:table-cell">Expected Return</TableHead>
-          <TableHead>
-            <span className="sr-only">Actions</span>
-          </TableHead>
+          {!isPublicView && (
+            <TableHead>
+              <span className="sr-only">Actions</span>
+            </TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -88,34 +92,36 @@ export function ItemsTable({ items, onEdit, onDelete, onReturn }: ItemsTableProp
             <TableCell className="hidden md:table-cell">
               {item.expectedReturnDate ? format(parseISO(item.expectedReturnDate), 'PPP') : 'N/A'}
             </TableCell>
-            <TableCell>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button aria-haspopup="true" size="icon" variant="ghost">
-                    <MoreHorizontal className="h-4 w-4" />
-                    <span className="sr-only">Toggle menu</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                  <DropdownMenuItem onSelect={() => onEdit(item)}>
-                    <Edit className="mr-2 h-4 w-4" />
-                    Edit
-                  </DropdownMenuItem>
-                  {item.status === 'Issued' && pathname === '/dashboard/return-item' && (
-                    <DropdownMenuItem onSelect={() => onReturn(item.id)}>
-                      <Undo2 className="mr-2 h-4 w-4" />
-                      Mark as Returned
+            {!isPublicView && (
+                <TableCell>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                    <Button aria-haspopup="true" size="icon" variant="ghost">
+                        <MoreHorizontal className="h-4 w-4" />
+                        <span className="sr-only">Toggle menu</span>
+                    </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <DropdownMenuItem onSelect={() => onEdit(item)}>
+                        <Edit className="mr-2 h-4 w-4" />
+                        Edit
                     </DropdownMenuItem>
-                  )}
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="text-destructive" onSelect={() => onDelete(item)}>
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Delete
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </TableCell>
+                    {item.status === 'Issued' && pathname === '/dashboard/return-item' && (
+                        <DropdownMenuItem onSelect={() => onReturn(item.id)}>
+                        <Undo2 className="mr-2 h-4 w-4" />
+                        Mark as Returned
+                        </DropdownMenuItem>
+                    )}
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="text-destructive" onSelect={() => onDelete(item)}>
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        Delete
+                    </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+                </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>
