@@ -12,19 +12,19 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth, useUser } from "@/firebase";
-import { initiateEmailSignIn } from "@/firebase/non-blocking-login";
+import { initiateEmailSignUp } from "@/firebase/non-blocking-login";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import Link from 'next/link';
 
-const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
+const signupSchema = z.object({
+  email: z.string().email({ message: "Please enter a valid email address." }),
+  password: z.string().min(6, { message: "Password must be at least 6 characters long." }),
 });
 
-export default function LoginPage() {
+export default function SignupPage() {
   const auth = useAuth();
   const { user, isUserLoading } = useUser();
   const router = useRouter();
@@ -39,10 +39,10 @@ export default function LoginPage() {
     }
   }, [user, isUserLoading, router]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    const validation = loginSchema.safeParse({ email, password });
+    const validation = signupSchema.safeParse({ email, password });
     if (!validation.success) {
       const firstError = validation.error.errors[0].message;
       setError(firstError);
@@ -54,18 +54,23 @@ export default function LoginPage() {
       return;
     }
     
-    initiateEmailSignIn(auth, email, password);
+    initiateEmailSignUp(auth, email, password);
     // The onAuthStateChanged listener in FirebaseProvider will handle the redirect
+    // and potential errors will be caught by the global error handler.
+    toast({
+        title: "Creating account...",
+        description: "Please wait while we set up your account."
+    })
   };
 
   return (
     <div className="flex items-center justify-center min-h-[calc(100vh-14rem)] bg-background">
       <Card className="w-full max-w-sm">
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleSignup}>
           <CardHeader>
-            <CardTitle className="text-2xl font-headline">Admin Login</CardTitle>
+            <CardTitle className="text-2xl font-headline">Create an Account</CardTitle>
             <CardDescription>
-              Enter your credentials to access the dashboard.
+              Enter your email and password to sign up.
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
@@ -81,12 +86,12 @@ export default function LoginPage() {
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
               <Button className="w-full" type="submit" disabled={isUserLoading}>
-                {isUserLoading ? 'Signing in...' : 'Sign in'}
+                {isUserLoading ? 'Creating account...' : 'Sign Up'}
               </Button>
               <div className="text-center text-sm text-muted-foreground">
-                Don&apos;t have an account?{' '}
-                <Link href="/signup" className="underline hover:text-primary">
-                    Sign up
+                Already have an account?{' '}
+                <Link href="/login" className="underline hover:text-primary">
+                    Log in
                 </Link>
               </div>
           </CardFooter>
