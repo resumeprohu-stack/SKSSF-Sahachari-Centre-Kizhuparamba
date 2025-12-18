@@ -8,7 +8,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      <section className="relative w-full h-[calc(100vh-4rem)] text-white">
+      <section className="relative w-full h-[calc(100vh-4rem)]">
         <Image
           src="/600.jpg"
           alt="Community and unity"
@@ -21,13 +21,11 @@ export default function Home() {
 
         <div className="absolute top-4 right-4 z-30">
           <Link href="https://www.facebook.com/profile.php?id=100073117396245" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook">
-            <Button variant="ghost" size="icon">
-              <Facebook className="h-6 w-6 text-white hover:text-blue-500" />
-            </Button>
+             <Image src="/fb.png" alt="Facebook" width={32} height={32} className="hover:opacity-80 transition-opacity" />
           </Link>
         </div>
 
-        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-4">
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-4 text-white">
           <h1 className="text-2xl md:text-3xl font-bold font-headline tracking-tight">
             SKSSF
           </h1>
