@@ -8,10 +8,12 @@ import {
   Package,
   FileText,
   LogOut,
+  FilePlus,
 } from 'lucide-react';
 
 const navLinks = [
   { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
+  { href: '/dashboard/new-issue', label: 'New Issue', icon: FilePlus },
   { href: '/dashboard/items', label: 'Item Management', icon: Package },
   { href: '/dashboard/reports', label: 'Reports', icon: FileText },
 ];
