@@ -15,7 +15,7 @@ const SmartStatusInsightsInputSchema = z.object({
   items: z.array(
     z.object({
       itemName: z.string().describe('The name of the item.'),
-      issuedTo: z.string().optional().describe('The name of the person the item is issued to, if applicable.'),
+      recipientName: z.string().optional().describe('The name of the person the item is issued to, if applicable.'),
       issueDate: z.string().optional().describe('The date the item was issued, if applicable.'),
       expectedReturnDate: z.string().optional().describe('The expected return date, if applicable.'),
       actualReturnDate: z.string().optional().describe('The actual return date, if applicable.'),
@@ -55,7 +55,7 @@ const smartStatusInsightsPrompt = ai.definePrompt({
   {{#each items}}
   - Item Name: {{itemName}}
     Status: {{status}}
-    {{#if issuedTo}}Issued To: {{issuedTo}}{{/if}}
+    {{#if recipientName}}Issued To: {{recipientName}}{{/if}}
     {{#if issueDate}}Issue Date: {{issueDate}}{{/if}}
     {{#if expectedReturnDate}}Expected Return Date: {{expectedReturnDate}}{{/if}}
     {{#if actualReturnDate}}Actual Return Date: {{actualReturnDate}}{{/if}}

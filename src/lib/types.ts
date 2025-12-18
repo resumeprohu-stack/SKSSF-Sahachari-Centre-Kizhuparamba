@@ -8,7 +8,9 @@ export type Item = {
   imageUrl: string;
   status: ItemStatus;
   dateAdded: string;
-  issuedTo?: string; // Name + Contact
+  recipientName?: string;
+  recipientMobile?: string;
+  issuerName?: string;
   issueDate?: string;
   expectedReturnDate?: string;
   actualReturnDate?: string;

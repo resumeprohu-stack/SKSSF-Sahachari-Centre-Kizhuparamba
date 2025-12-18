@@ -10,10 +10,12 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Undo2 } from 'lucide-react';
+import { Undo2, Phone, MessageCircle } from 'lucide-react';
 import { items } from '@/lib/data';
 import type { Item } from '@/lib/types';
 import { ReturnItemDialog } from '@/components/dashboard/return-item-dialog';
+import { format, parseISO } from 'date-fns';
+import Link from 'next/link';
 
 export default function ReturnItemPage() {
   const { toast } = useToast();
@@ -47,39 +49,59 @@ export default function ReturnItemPage() {
         </h1>
       </div>
       
-      <Card className="max-w-2xl mx-auto w-full">
+      <Card className="w-full">
         <CardHeader>
-          <CardTitle>Select an Item to Return</CardTitle>
+          <CardTitle>Issued Items</CardTitle>
           <CardDescription>
-            Choose an issued item from the list below to mark it as returned.
+            A list of all items currently on loan.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {issuedItems.length > 0 ? (
               issuedItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
-                >
-                  <div>
-                    <p className="font-semibold">{item.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      Issued to: {item.issuedTo}
-                    </p>
+                <Card key={item.id} className="p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* Item Info */}
+                    <div className="md:col-span-2 space-y-3">
+                      <h3 className="font-bold text-lg text-primary">{item.name}</h3>
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                        <p><strong className="text-muted-foreground">Recipient:</strong> {item.recipientName}</p>
+                        <p><strong className="text-muted-foreground">Issuer:</strong> {item.issuerName}</p>
+                        <p><strong className="text-muted-foreground">Issue Date:</strong> {item.issueDate ? format(parseISO(item.issueDate), 'PPP') : 'N/A'}</p>
+                        <p><strong className="text-muted-foreground">Return By:</strong> {item.expectedReturnDate ? format(parseISO(item.expectedReturnDate), 'PPP') : 'N/A'}</p>
+                      </div>
+                    </div>
+                    {/* Actions */}
+                    <div className="flex flex-col items-start md:items-end justify-between gap-3">
+                        <div className="flex items-center gap-2">
+                            <Button variant="outline" size="icon" asChild>
+                                <Link href={`tel:${item.recipientMobile}`}>
+                                    <Phone className="h-4 w-4" />
+                                    <span className="sr-only">Call recipient</span>
+                                </Link>
+                            </Button>
+                             <Button variant="outline" size="icon" className="bg-green-500 hover:bg-green-600 text-white" asChild>
+                                <Link href={`https://wa.me/${item.recipientMobile}`} target="_blank">
+                                    <MessageCircle className="h-4 w-4" />
+                                    <span className="sr-only">WhatsApp recipient</span>
+                                </Link>
+                            </Button>
+                        </div>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleOpenReturnDialog(item)}
+                        >
+                            <Undo2 className="mr-2 h-4 w-4" />
+                            Return
+                        </Button>
+                    </div>
                   </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleOpenReturnDialog(item)}
-                  >
-                    <Undo2 className="mr-2 h-4 w-4" />
-                    Return
-                  </Button>
-                </div>
+                </Card>
               ))
             ) : (
-              <p className="text-center text-muted-foreground py-4">
+              <p className="text-center text-muted-foreground py-8">
                 No items are currently issued.
               </p>
             )}

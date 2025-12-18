@@ -25,7 +25,7 @@ export function SmartStatus({ items }: SmartStatusProps) {
     const formattedItems = items.map(item => ({
         itemName: item.name,
         status: item.status,
-        issuedTo: item.issuedTo,
+        recipientName: item.recipientName,
         issueDate: item.issueDate,
         expectedReturnDate: item.expectedReturnDate,
         actualReturnDate: item.actualReturnDate,

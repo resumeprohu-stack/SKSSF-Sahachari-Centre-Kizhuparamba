@@ -80,7 +80,7 @@ export function ItemsTable({ items, onEdit, onDelete, onReturn }: ItemsTableProp
                 {item.status === 'Issued' && isOverdue(item.expectedReturnDate) ? 'Overdue' : item.status}
               </Badge>
             </TableCell>
-            <TableCell className="hidden md:table-cell">{item.issuedTo || 'N/A'}</TableCell>
+            <TableCell className="hidden md:table-cell">{item.recipientName || 'N/A'}</TableCell>
             <TableCell className="hidden md:table-cell">
               {item.expectedReturnDate ? format(parseISO(item.expectedReturnDate), 'PPP') : 'N/A'}
             </TableCell>

@@ -38,7 +38,9 @@ const itemSchema = z.object({
   description: z.string().optional(),
   imageUrl: z.string().url('Must be a valid URL'),
   status: z.enum(['Available', 'Issued']),
-  issuedTo: z.string().optional(),
+  recipientName: z.string().optional(),
+  recipientMobile: z.string().optional(),
+  issuerName: z.string().optional(),
   issueDate: z.date().optional(),
   expectedReturnDate: z.date().optional(),
 });
@@ -80,7 +82,9 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
         description: '',
         imageUrl: '',
         status: 'Available',
-        issuedTo: '',
+        recipientName: '',
+        recipientMobile: '',
+        issuerName: '',
         issueDate: undefined,
         expectedReturnDate: undefined,
       });
@@ -152,8 +156,16 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
             />
           </div>
            <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="issuedTo" className="text-right">Issued To</Label>
-            <Input id="issuedTo" {...register('issuedTo')} className="col-span-3" placeholder="Name (Contact)" />
+            <Label htmlFor="recipientName" className="text-right">Recipient Name</Label>
+            <Input id="recipientName" {...register('recipientName')} className="col-span-3" placeholder="Name" />
+          </div>
+           <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="recipientMobile" className="text-right">Recipient Mobile</Label>
+            <Input id="recipientMobile" {...register('recipientMobile')} className="col-span-3" placeholder="Mobile Number" />
+          </div>
+           <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="issuerName" className="text-right">Issuer Name</Label>
+            <Input id="issuerName" {...register('issuerName')} className="col-span-3" placeholder="Name" />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="issueDate" className="text-right">Issue Date</Label>
@@ -179,7 +191,7 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
                         mode="single"
                         selected={field.value}
                         onSelect={(date) => {
-                            field.onChange(date);
+                            if(date) field.onChange(date);
                             setIssueDateOpen(false);
                         }}
                         initialFocus
@@ -213,7 +225,7 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
                         mode="single"
                         selected={field.value}
                         onSelect={(date) => {
-                            field.onChange(date);
+                            if(date) field.onChange(date);
                             setReturnDateOpen(false);
                         }}
                         initialFocus

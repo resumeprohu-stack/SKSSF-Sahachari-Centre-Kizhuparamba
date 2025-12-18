@@ -8,7 +8,7 @@ const SmartStatusInsightsInputSchema = z.object({
     z.object({
       itemName: z.string(),
       status: z.string(),
-      issuedTo: z.string().optional(),
+      recipientName: z.string().optional(),
       issueDate: z.string().optional(),
       expectedReturnDate: z.string().optional(),
       actualReturnDate: z.string().optional(),
