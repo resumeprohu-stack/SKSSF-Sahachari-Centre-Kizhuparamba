@@ -1,3 +1,52 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "carousel-1",
+      "description": "A group of volunteers helping the community.",
+      "imageUrl": "https://images.unsplash.com/photo-1761250027507-c0be614c0254?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjb21tdW5pdHklMjBoZWxwfGVufDB8fHx8MTc2NjAyNTg0MHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "community help"
+    },
+    {
+      "id": "carousel-2",
+      "description": "Medical equipment available for charity.",
+      "imageUrl": "https://images.unsplash.com/photo-1606206873764-fd15e242df52?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtZWRpY2FsJTIwZXF1aXBtZW50fGVufDB8fHx8MTc2NTk2NTY1N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "medical equipment"
+    },
+    {
+      "id": "carousel-3",
+      "description": "A person receiving a donated item.",
+      "imageUrl": "https://images.unsplash.com/photo-1599059813005-11265ba4b4ce?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjaGFyaXR5JTIwZG9uYXRpb258ZW58MHx8fHwxNzY2MDI1ODQwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "charity donation"
+    },
+    {
+      "id": "item-wheelchair",
+      "description": "A standard wheelchair.",
+      "imageUrl": "https://images.unsplash.com/photo-1570793005299-c091be91bbad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3aGVlbGNoYWlyfGVufDB8fHx8MTc2NTk2NTY1N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wheelchair"
+    },
+    {
+      "id": "item-crutches",
+      "description": "A pair of crutches.",
+      "imageUrl": "https://images.unsplash.com/photo-1656445067889-99ba76d754d6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjcnV0Y2hlc3xlbnwwfHx8fDE3NjYwMjU4NDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "crutches"
+    },
+    {
+      "id": "item-bed",
+      "description": "A medical bed.",
+      "imageUrl": "https://images.unsplash.com/photo-1710074213374-e68503a1b795?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxtZWRpY2FsJTIwYmVkfGVufDB8fHx8MTc2NjAyNTg0MHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "medical bed"
+    },
+    {
+      "id": "item-oxygen",
+      "description": "An oxygen cylinder.",
+      "imageUrl": "https://images.unsplash.com/photo-1620418583334-4edb19ffc86e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxveHlnZW4lMjB0YW5rfGVufDB8fHx8MTc2NjAyNTg0MHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "oxygen tank"
+    },
+    {
+      "id": "item-walker",
+      "description": "A walker for elderly support.",
+      "imageUrl": "https://images.unsplash.com/photo-1665183161633-6f92b90d9ef2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx3YWxrZXJ8ZW58MHx8fHwxNzY2MDI1ODQwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "walker"
+    }
+  ]
 }

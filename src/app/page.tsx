@@ -1,3 +1,55 @@
+import { Button } from '@/components/ui/button';
+import { HeroCarousel } from '@/components/home/hero-carousel';
+import Link from 'next/link';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
+
 export default function Home() {
-  return <></>;
+  const carouselImages = PlaceHolderImages.filter((image) =>
+    image.id.startsWith('carousel')
+  );
+
+  return (
+    <div className="flex flex-col">
+      <section className="relative w-full h-[60vh] md:h-[80vh] text-white">
+        <HeroCarousel images={carouselImages} />
+        <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center p-4">
+          <h1 className="text-4xl md:text-6xl font-bold font-headline tracking-tight">
+            SKSSF Sahachari Center
+          </h1>
+          <p className="mt-4 text-lg md:text-2xl max-w-3xl">
+            Your trusted partner in community support and resource sharing in Kizhuparamba.
+          </p>
+          <Button asChild size="lg" className="mt-8">
+            <Link href="/items">View Available Items</Link>
+          </Button>
+        </div>
+      </section>
+
+      <section id="about" className="py-16 md:py-24">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold font-headline text-primary">
+                About Sahachari Center
+              </h2>
+              <p className="mt-4 text-lg text-muted-foreground">
+                The SKSSF Sahachari Center in Kizhuparamba is a charity organization dedicated to providing essential resources to those in need within our community. We manage and lend items to ensure everyone has access to the support they require.
+              </p>
+              <p className="mt-4 text-lg text-muted-foreground">
+                Our mission is to foster a spirit of sharing and support, making our community stronger and more resilient. This platform helps us transparently manage our resources and connect them with the people who need them most.
+              </p>
+            </div>
+            <div>
+                <img
+                  src="https://picsum.photos/seed/community/600/400"
+                  alt="Community volunteers"
+                  data-ai-hint="community volunteers"
+                  className="rounded-lg shadow-lg object-cover w-full h-full"
+                />
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
 }
