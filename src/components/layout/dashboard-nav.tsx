@@ -11,6 +11,7 @@ import {
   LogOut,
   FilePlus,
   Undo2,
+  List,
 } from 'lucide-react';
 
 const navLinks = [
@@ -18,6 +19,7 @@ const navLinks = [
   { href: '/dashboard/new-issue', label: 'New Issue', icon: FilePlus },
   { href: '/dashboard/return-item', label: 'Return Item', icon: Undo2 },
   { href: '/dashboard/items', label: 'Item Management', icon: Package },
+  { href: '/items', label: 'Available Items', icon: List },
   { href: '/dashboard/reports', label: 'Reports', icon: FileText },
 ];
 
@@ -31,7 +33,7 @@ export function DashboardNav({ isMobile = false, onLinkClick }: { isMobile?: boo
 
   // A simple way to check for active parent routes
   const isParentActive = (href: string) => {
-    if (href === '/dashboard') return pathname === href;
+    if (href === '/dashboard' || href === '/items') return pathname === href;
     return pathname.startsWith(href);
   }
 

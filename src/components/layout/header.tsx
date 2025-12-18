@@ -12,7 +12,6 @@ import Image from 'next/image';
 
 const navLinks = [
   { href: '/', label: 'Home' },
-  { href: '/items', label: 'Available Items' },
   { href: '/dashboard', label: 'Dashboard' },
 ];
 
@@ -47,7 +46,7 @@ export function Header() {
                 href={link.href}
                 className={cn(
                   "text-sm font-medium transition-colors hover:text-primary",
-                  pathname === link.href ? "text-primary" : "text-muted-foreground"
+                  pathname.startsWith(link.href) && link.href !== '/' || pathname === '/' && link.href === '/' ? "text-primary" : "text-muted-foreground"
                 )}
               >
                 {link.label}
@@ -79,7 +78,7 @@ export function Header() {
                     onClick={() => setIsOpen(false)}
                      className={cn(
                         "text-lg font-medium transition-colors hover:text-primary",
-                        pathname === link.href ? "text-primary" : "text-muted-foreground"
+                        pathname.startsWith(link.href) && link.href !== '/' || pathname === '/' && link.href === '/' ? "text-primary" : "text-muted-foreground"
                     )}
                   >
                     {link.label}
