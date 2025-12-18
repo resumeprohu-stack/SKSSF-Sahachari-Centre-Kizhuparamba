@@ -27,6 +27,7 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { items } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
+import { useState } from 'react';
 
 const issueSchema = z.object({
   recipientName: z.string().min(3, 'Recipient name is required'),
@@ -40,6 +41,7 @@ type IssueFormData = z.infer<typeof issueSchema>;
 
 export default function NewIssuePage() {
   const { toast } = useToast();
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const {
     register,
     handleSubmit,
@@ -112,7 +114,7 @@ export default function NewIssuePage() {
                 name="issueDate"
                 control={control}
                 render={({ field }) => (
-                  <Popover>
+                  <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                     <PopoverTrigger asChild>
                       <Button
                         variant={'outline'}
@@ -129,7 +131,10 @@ export default function NewIssuePage() {
                       <Calendar
                         mode="single"
                         selected={field.value}
-                        onSelect={field.onChange}
+                        onSelect={(date) => {
+                          field.onChange(date);
+                          setIsCalendarOpen(false);
+                        }}
                         disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
                         initialFocus
                       />
