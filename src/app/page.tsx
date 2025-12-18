@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { HeroCarousel } from '@/components/home/hero-carousel';
 import Link from 'next/link';
 import { placeholderImages as PlaceHolderImages } from '@/lib/placeholder-images.json';
+import Image from 'next/image';
 
 export default function Home() {
   const carouselImages = PlaceHolderImages.filter((image) =>
@@ -40,10 +41,12 @@ export default function Home() {
               </p>
             </div>
             <div>
-                <img
+                <Image
                   src="https://picsum.photos/seed/community/600/400"
                   alt="Community volunteers"
                   data-ai-hint="community volunteers"
+                  width={600}
+                  height={400}
                   className="rounded-lg shadow-lg object-cover w-full h-full"
                 />
             </div>
