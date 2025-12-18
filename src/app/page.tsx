@@ -14,9 +14,12 @@ export default function Home() {
       <section className="relative w-full h-[60vh] md:h-[80vh] text-white">
         <HeroCarousel images={carouselImages} />
         <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center p-4">
-          <h1 className="text-4xl md:text-6xl font-bold font-headline tracking-tight">
-            SKSSF Sahachari Center
+          <h1 className="text-2xl md:text-3xl font-bold font-headline tracking-tight">
+            SKSSF
           </h1>
+          <h2 className="text-4xl md:text-6xl font-bold font-headline tracking-tight uppercase">
+            Sahachari Centre Kizhuparamba
+          </h2>
           <p className="mt-4 text-lg md:text-2xl max-w-3xl">
             Your trusted partner in community support and resource sharing in Kizhuparamba.
           </p>
