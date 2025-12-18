@@ -23,6 +23,7 @@ import type { Item } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { format, parseISO } from 'date-fns';
+import { usePathname } from 'next/navigation';
 
 interface ItemsTableProps {
   items: Item[];
@@ -32,6 +33,7 @@ interface ItemsTableProps {
 }
 
 export function ItemsTable({ items, onEdit, onDelete, onReturn }: ItemsTableProps) {
+  const pathname = usePathname();
   const isOverdue = (dateString?: string) => {
     if (!dateString) return false;
     return new Date(dateString) < new Date();
@@ -97,7 +99,7 @@ export function ItemsTable({ items, onEdit, onDelete, onReturn }: ItemsTableProp
                     <Edit className="mr-2 h-4 w-4" />
                     Edit
                   </DropdownMenuItem>
-                  {item.status === 'Issued' && (
+                  {item.status === 'Issued' && pathname !== '/dashboard/items' && (
                     <DropdownMenuItem onSelect={() => onReturn(item.id)}>
                       <Undo2 className="mr-2 h-4 w-4" />
                       Mark as Returned
