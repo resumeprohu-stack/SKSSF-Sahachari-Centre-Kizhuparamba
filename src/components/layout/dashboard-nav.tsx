@@ -26,6 +26,12 @@ export function DashboardNav({ isMobile = false }: { isMobile?: boolean }) {
   const mobileClass = "text-lg";
   const desktopClass = "text-sm";
 
+  // A simple way to check for active parent routes
+  const isParentActive = (href: string) => {
+    if (href === '/dashboard') return pathname === href;
+    return pathname.startsWith(href);
+  }
+
   return (
     <nav className="grid items-start px-2 font-medium lg:px-4 mt-4">
         {navLinks.map((link) => (
@@ -35,7 +41,7 @@ export function DashboardNav({ isMobile = false }: { isMobile?: boolean }) {
                 className={cn(
                     commonClass,
                     isMobile ? mobileClass : desktopClass,
-                    pathname === link.href && activeClass
+                    isParentActive(link.href) && activeClass
                 )}
             >
                 <link.icon className="h-4 w-4" />
