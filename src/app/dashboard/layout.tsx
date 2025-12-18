@@ -1,14 +1,22 @@
+
+'use client';
+
 import { DashboardNav } from '@/components/layout/dashboard-nav';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+  const closeSheet = () => setIsSheetOpen(false);
+
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <aside className="hidden border-r bg-muted/40 md:block">
@@ -25,7 +33,7 @@ export default function DashboardLayout({
       </aside>
       <div className="flex flex-col">
         <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6 md:hidden">
-          <Sheet>
+          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
             <SheetTrigger asChild>
               <Button
                 variant="outline"
@@ -36,12 +44,12 @@ export default function DashboardLayout({
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="flex flex-col">
+            <SheetContent side="left" className="flex flex-col p-0">
                 <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
                     <Link href="/" className="flex items-center gap-2 font-semibold font-headline">
                     </Link>
                 </div>
-                <DashboardNav isMobile={true} />
+                <DashboardNav isMobile={true} onLinkClick={closeSheet} />
             </SheetContent>
           </Sheet>
           <div className='flex-1 text-center font-bold font-headline text-primary'>Dashboard</div>

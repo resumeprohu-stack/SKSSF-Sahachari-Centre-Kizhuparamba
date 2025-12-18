@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -20,7 +21,7 @@ const navLinks = [
   { href: '/dashboard/reports', label: 'Reports', icon: FileText },
 ];
 
-export function DashboardNav({ isMobile = false }: { isMobile?: boolean }) {
+export function DashboardNav({ isMobile = false, onLinkClick }: { isMobile?: boolean; onLinkClick?: () => void; }) {
   const pathname = usePathname();
 
   const commonClass = "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary";
@@ -40,6 +41,7 @@ export function DashboardNav({ isMobile = false }: { isMobile?: boolean }) {
             <Link
                 key={link.href}
                 href={link.href}
+                onClick={onLinkClick}
                 className={cn(
                     commonClass,
                     isMobile ? mobileClass : desktopClass,
@@ -53,6 +55,7 @@ export function DashboardNav({ isMobile = false }: { isMobile?: boolean }) {
          <div className="mt-8">
             <Link
                 href="/"
+                onClick={onLinkClick}
                 className={cn(commonClass, isMobile ? mobileClass : desktopClass)}
             >
                 <LogOut className="h-4 w-4" />
