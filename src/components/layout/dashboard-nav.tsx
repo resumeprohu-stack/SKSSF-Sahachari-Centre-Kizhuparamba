@@ -9,11 +9,13 @@ import {
   FileText,
   LogOut,
   FilePlus,
+  Undo2,
 } from 'lucide-react';
 
 const navLinks = [
   { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
   { href: '/dashboard/new-issue', label: 'New Issue', icon: FilePlus },
+  { href: '/dashboard/return-item', label: 'Return Item', icon: Undo2 },
   { href: '/dashboard/items', label: 'Item Management', icon: Package },
   { href: '/dashboard/reports', label: 'Reports', icon: FileText },
 ];

@@ -22,14 +22,12 @@ import {
 } from '@/components/ui/select';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon, FilePlus, Undo2 } from 'lucide-react';
+import { CalendarIcon, FilePlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { items } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
-import type { Item } from '@/lib/types';
-import { ReturnItemDialog } from '@/components/dashboard/return-item-dialog';
 
 const issueSchema = z.object({
   recipientName: z.string().min(3, 'Recipient name is required'),
@@ -44,9 +42,7 @@ type IssueFormData = z.infer<typeof issueSchema>;
 export default function NewIssuePage() {
   const { toast } = useToast();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [isReturnDialogOpen, setIsReturnDialogOpen] = useState(false);
-  const [itemToReturn, setItemToReturn] = useState<Item | null>(null);
-
+  
   const {
     register,
     handleSubmit,
@@ -61,7 +57,6 @@ export default function NewIssuePage() {
   });
 
   const availableItems = items.filter((item) => item.status === 'Available');
-  const issuedItems = items.filter((item) => item.status === 'Issued');
 
   const onSubmit = (data: IssueFormData) => {
     console.log('New Issue Submitted:', data);
@@ -71,22 +66,6 @@ export default function NewIssuePage() {
     });
     // In a real app, you would update the item's status in your database
     reset();
-  };
-
-  const handleOpenReturnDialog = (item: Item) => {
-    setItemToReturn(item);
-    setIsReturnDialogOpen(true);
-  };
-
-  const handleReturnSubmit = (data: { collectedBy: string, returnDate: Date }) => {
-    console.log('Item Returned:', { itemId: itemToReturn?.id, ...data });
-    toast({
-      title: 'Item Marked as Returned!',
-      description: `${itemToReturn?.name} collected by ${data.collectedBy}.`,
-    });
-    // In a real app, you would update the item's status to 'Available' or 'Returned'
-    setIsReturnDialogOpen(false);
-    setItemToReturn(null);
   };
 
   return (
@@ -205,55 +184,6 @@ export default function NewIssuePage() {
           </form>
         </CardContent>
       </Card>
-
-      <Card className="max-w-2xl mx-auto w-full">
-        <CardHeader>
-          <CardTitle>Return an Item</CardTitle>
-          <CardDescription>
-            Select an issued item to mark it as returned.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {issuedItems.length > 0 ? (
-              issuedItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
-                >
-                  <div>
-                    <p className="font-semibold">{item.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      Issued to: {item.issuedTo}
-                    </p>
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleOpenReturnDialog(item)}
-                  >
-                    <Undo2 className="mr-2 h-4 w-4" />
-                    Return
-                  </Button>
-                </div>
-              ))
-            ) : (
-              <p className="text-center text-muted-foreground py-4">
-                No items are currently issued.
-              </p>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-
-      {itemToReturn && (
-        <ReturnItemDialog
-          isOpen={isReturnDialogOpen}
-          setIsOpen={setIsReturnDialogOpen}
-          item={itemToReturn}
-          onSubmit={handleReturnSubmit}
-        />
-      )}
     </div>
   );
 }
