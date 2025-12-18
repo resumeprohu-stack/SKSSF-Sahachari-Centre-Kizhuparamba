@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,7 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 import Link from 'next/link';
 import { onAuthStateChanged, User } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates";
 
 const signupSchema = z.object({
@@ -47,7 +48,10 @@ export default function SignupPage() {
 
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: User | null) => {
         if (firebaseUser && name && email && mobileNumber) {
-            // User is created and we have the form data, save to Firestore
+            const usersRef = collection(firestore, "users");
+            const usersSnapshot = await getDocs(usersRef);
+            const isFirstUser = usersSnapshot.empty;
+
             const userRef = doc(firestore, "users", firebaseUser.uid);
             const userData = {
                 uid: firebaseUser.uid,
@@ -58,13 +62,16 @@ export default function SignupPage() {
             };
             setDocumentNonBlocking(userRef, userData, { merge: true });
 
-            // Clear form fields after successful registration and data save
+            if(isFirstUser) {
+                const adminRoleRef = doc(firestore, "roles_admin", firebaseUser.uid);
+                setDocumentNonBlocking(adminRoleRef, { uid: firebaseUser.uid }, {});
+            }
+
             setName('');
             setEmail('');
             setMobileNumber('');
             setPassword('');
             
-            // Redirect to dashboard
             router.push('/dashboard');
         }
     });

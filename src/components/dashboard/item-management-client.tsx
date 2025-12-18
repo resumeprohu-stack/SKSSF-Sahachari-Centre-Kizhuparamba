@@ -10,6 +10,7 @@ import { ItemFormDialog } from './item-form-dialog';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
 import { usePathname } from 'next/navigation';
+import { useUser } from '@/firebase';
 
 interface ItemManagementClientProps {
   items: Item[];
@@ -25,31 +26,33 @@ export function ItemManagementClient({ items, title, onDeleteItem, onFormSubmit,
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<Item | null>(null);
     const pathname = usePathname();
+    const { user } = useUser();
+    const isAdmin = (user as any)?.customClaims?.admin;
 
     // The component is read-only if the prop is set or if it's on the public page.
     const readOnly = isReadOnly || pathname === '/dashboard/list-of-equipments';
 
 
     const handleAddItem = () => {
-        if (readOnly) return;
+        if (readOnly || !isAdmin) return;
         setSelectedItem(null);
         setIsFormDialogOpen(true);
     };
 
     const handleEditItem = (item: Item) => {
-        if (readOnly) return;
+        if (readOnly || !isAdmin) return;
         setSelectedItem(item);
         setIsFormDialogOpen(true);
     };
     
     const handleDeleteClick = (item: Item) => {
-        if (readOnly) return;
+        if (readOnly || !isAdmin) return;
         setSelectedItem(item);
         setIsDeleteDialogOpen(true);
     };
 
     const confirmDelete = () => {
-        if (selectedItem && !readOnly) {
+        if (selectedItem && !readOnly && isAdmin) {
             onDeleteItem(selectedItem.id);
         }
         setIsDeleteDialogOpen(false);
@@ -57,7 +60,7 @@ export function ItemManagementClient({ items, title, onDeleteItem, onFormSubmit,
     }
 
     const handleFormSubmitAndClose = (data: Item) => {
-        if (readOnly) return;
+        if (readOnly || !isAdmin) return;
         onFormSubmit(data);
         setIsFormDialogOpen(false);
     }
@@ -87,7 +90,7 @@ export function ItemManagementClient({ items, title, onDeleteItem, onFormSubmit,
                         }
                     </CardDescription>
                 </div>
-                {!readOnly && (
+                {!readOnly && isAdmin && (
                     <Button size="sm" className="gap-1" onClick={handleAddItem}>
                         <PlusCircle className="h-4 w-4" />
                         Add Item
@@ -100,10 +103,10 @@ export function ItemManagementClient({ items, title, onDeleteItem, onFormSubmit,
                     onEdit={handleEditItem}
                     onDelete={handleDeleteClick}
                     onReturn={handleReturnItem}
-                    isReadOnly={readOnly}
+                    isReadOnly={readOnly || !isAdmin}
                 />
             </CardContent>
-            {!readOnly && (
+            {!readOnly && isAdmin && (
                 <>
                     <ItemFormDialog
                         isOpen={isFormDialogOpen}
