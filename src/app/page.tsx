@@ -13,7 +13,8 @@ export default function Home() {
     <div className="flex flex-col">
       <section className="relative w-full h-[60vh] md:h-[80vh] text-white">
         <HeroCarousel images={carouselImages} />
-        <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center p-4">
+        <div className="absolute inset-0 bg-black/50 z-10"></div>
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-4">
           <h1 className="text-2xl md:text-3xl font-bold font-headline tracking-tight">
             SKSSF
           </h1>
