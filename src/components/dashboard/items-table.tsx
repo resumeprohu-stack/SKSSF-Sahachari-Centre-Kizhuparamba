@@ -35,7 +35,7 @@ interface ItemsTableProps {
 
 export function ItemsTable({ items, onEdit, onDelete, onReturn }: ItemsTableProps) {
   const pathname = usePathname();
-  const isPublicView = pathname === '/items';
+  const isPublicView = pathname === '/dashboard/item-availability';
 
   const isOverdue = (dateString?: string) => {
     if (!dateString) return false;
