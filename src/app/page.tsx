@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Facebook } from 'lucide-react';
 
 export default function Home() {
 
@@ -20,7 +19,7 @@ export default function Home() {
         <div className="absolute top-4 left-4 z-20">
             <Button asChild variant="outline" size="icon">
                 <Link href="https://www.facebook.com" target="_blank" aria-label="Facebook Page">
-                    <Facebook className="h-5 w-5" />
+                    <Image src="/fb.png" alt="Facebook Page" width={20} height={20} />
                 </Link>
             </Button>
         </div>
