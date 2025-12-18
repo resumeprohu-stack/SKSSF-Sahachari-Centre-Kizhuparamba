@@ -8,7 +8,7 @@ export default function Home() {
     <div className="flex flex-col">
       <section className="relative w-full h-[calc(60vh-4rem)] md:h-[calc(80vh-4rem)] text-white">
         <Image
-          src="/100.jpg"
+          src="/600.jpg"
           alt="Community and unity"
           fill
           className="object-cover"
@@ -23,7 +23,7 @@ export default function Home() {
           <h2 className="text-3xl md:text-[2.8rem] font-bold font-headline tracking-tight uppercase">
             Sahachari Centre Kizhuparamba
           </h2>
-          <div className="mt-4 text-lg md:text-2xl max-w-3xl">
+          <div className="mt-4 text-lg md:text-2xl">
             <p>കരുണയുടെ നോട്ടം</p>
             <p>കനിവിൻ്റെ സന്ദേശം</p>
           </div>
