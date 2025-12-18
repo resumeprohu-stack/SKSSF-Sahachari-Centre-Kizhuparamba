@@ -1,18 +1,20 @@
 import { Button } from '@/components/ui/button';
-import { HeroCarousel } from '@/components/home/hero-carousel';
 import Link from 'next/link';
-import { placeholderImages as PlaceHolderImages } from '@/lib/placeholder-images.json';
 import Image from 'next/image';
 
 export default function Home() {
-  const carouselImages = PlaceHolderImages.filter((image) =>
-    image.id.startsWith('carousel')
-  );
 
   return (
     <div className="flex flex-col">
       <section className="relative w-full h-[60vh] md:h-[80vh] text-white">
-        <HeroCarousel images={carouselImages} />
+        <Image
+          src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb21tdW5pdHl8ZW58MHx8fHwxNzY2MDU4MTc0fDA&ixlib=rb-4.1.0&q=80&w=1080"
+          alt="Community and unity"
+          fill
+          className="object-cover"
+          data-ai-hint="community help"
+          priority
+        />
         <div className="absolute inset-0 bg-black/50 z-10"></div>
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-4">
           <h1 className="text-2xl md:text-3xl font-bold font-headline tracking-tight">
