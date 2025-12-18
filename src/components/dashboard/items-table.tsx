@@ -47,7 +47,7 @@ export function ItemsTable({ items, onEdit, onDelete, onReturn }: ItemsTableProp
           <TableHead className="hidden w-[100px] sm:table-cell">Image</TableHead>
           <TableHead>Name</TableHead>
           <TableHead>Status</TableHead>
-          <TableHead className="hidden md:table-cell">Issued To</TableHead>
+          <TableHead className="hidden md:table-cell">Issue Date</TableHead>
           <TableHead className="hidden md:table-cell">Expected Return</TableHead>
           <TableHead>
             <span className="sr-only">Actions</span>
@@ -81,7 +81,9 @@ export function ItemsTable({ items, onEdit, onDelete, onReturn }: ItemsTableProp
                 {item.status === 'Issued' && isOverdue(item.expectedReturnDate) ? 'Overdue' : item.status}
               </Badge>
             </TableCell>
-            <TableCell className="hidden md:table-cell">{item.recipientName || 'N/A'}</TableCell>
+            <TableCell className="hidden md:table-cell">
+              {item.issueDate ? format(parseISO(item.issueDate), 'PPP') : 'N/A'}
+            </TableCell>
             <TableCell className="hidden md:table-cell">
               {item.expectedReturnDate ? format(parseISO(item.expectedReturnDate), 'PPP') : 'N/A'}
             </TableCell>
