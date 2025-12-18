@@ -18,7 +18,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/50 z-10"></div>
         <div className="absolute top-4 left-4 z-20">
             <Button asChild variant="outline" size="icon">
-                <Link href="https://www.facebook.com" target="_blank" aria-label="Facebook Page">
+                <Link href="https://www.facebook.com/profile.php?id=100073117396245" target="_blank" aria-label="Facebook Page">
                     <Image src="/fb.png" alt="Facebook Page" width={20} height={20} />
                 </Link>
             </Button>
