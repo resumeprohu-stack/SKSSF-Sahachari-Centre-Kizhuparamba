@@ -37,7 +37,7 @@ export default function Home() {
             <p>കനിവിൻ്റെ സന്ദേശം</p>
           </div>
           <Button asChild size="lg" className="mt-8">
-            <Link href="/items">ലഭ്യമായ ഉപകരണങ്ങൾ കാണുക</Link>
+            <Link href="/dashboard/list-of-equipments">ലഭ്യമായ ഉപകരണങ്ങൾ കാണുക</Link>
           </Button>
         </div>
       </section>
