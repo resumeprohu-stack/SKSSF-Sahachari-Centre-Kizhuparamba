@@ -22,7 +22,12 @@ export default function ReturnItemPage() {
   const [isReturnDialogOpen, setIsReturnDialogOpen] = useState(false);
   const [itemToReturn, setItemToReturn] = useState<Item | null>(null);
 
-  const issuedItems = items.filter((item) => item.status === 'Issued');
+  const issuedItems = items
+    .filter((item) => item.status === 'Issued')
+    .sort((a, b) => {
+        if (!a.issueDate || !b.issueDate) return 0;
+        return new Date(a.issueDate).getTime() - new Date(b.issueDate).getTime();
+    });
 
   const handleOpenReturnDialog = (item: Item) => {
     setItemToReturn(item);
