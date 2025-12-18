@@ -17,11 +17,11 @@ export default function Home() {
         />
         <div className="absolute inset-0 bg-black/50 z-10"></div>
         <div className="absolute top-4 left-4 z-20">
-            <Button asChild variant="outline" size="icon">
-                <Link href="https://www.facebook.com/profile.php?id=100073117396245" target="_blank" aria-label="Facebook Page">
-                    <Image src="/fb.png" alt="Facebook Page" width={20} height={20} />
-                </Link>
+          <Link href="https://www.facebook.com/profile.php?id=100073117396245" target="_blank" aria-label="Facebook Page">
+            <Button variant="outline" size="icon">
+              <Image src="/fb.png" alt="Facebook Page" width={20} height={20} />
             </Button>
+          </Link>
         </div>
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-4">
           <h1 className="text-2xl md:text-3xl font-bold font-headline tracking-tight">
