@@ -22,9 +22,10 @@
  *   to all client-side requests. This is a critical security measure to prevent any user from
  *   escalating their own privileges. Admin roles must be managed server-side or via the Firebase Console.
  * - **Public Read, Admin Write**: The main `items` collection is publicly readable by anyone,
- *   including unauthenticated users. This allows the inventory to be browsed freely. However,
+ *   including unauthenticated users. However,
  *   only admins can add, modify, or remove items.
- * - **Default Deny**: All paths not explicitly matched are denied access by default.
+ *
+ * ## Default Deny**: All paths not explicitly matched are denied access by default.
  *
  * ## Denormalization for Authorization
  * The primary use of denormalization is the `roles_admin` collection. Instead of checking a
@@ -101,7 +102,7 @@ service cloud.firestore {
      */
     match /items/{itemId} {
       allow get, list: if true;
-      allow create: if isAdmin();
+      allow create: if isSignedIn();
       allow update: if isAdmin() && resource != null;
       allow delete: if isAdmin() && resource != null;
 
