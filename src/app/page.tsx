@@ -6,7 +6,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      <section className="relative w-full h-[60vh] md:h-[80vh] text-white">
+      <section className="relative w-full h-[calc(60vh-4rem)] md:h-[calc(80vh-4rem)] text-white">
         <Image
           src="/100.jpg"
           alt="Community and unity"
