@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -7,32 +8,48 @@ import type { Item } from '@/lib/types';
 import { ItemsTable } from './items-table';
 import { ItemFormDialog } from './item-form-dialog';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
 
 interface ItemManagementClientProps {
-    items: Item[];
-    title: string;
+  items: Item[];
+  title: string;
+  onDeleteItem: (id: string) => void;
+  onFormSubmit: (data: Item) => void;
 }
 
-export function ItemManagementClient({ items, title }: ItemManagementClientProps) {
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+export function ItemManagementClient({ items, title, onDeleteItem, onFormSubmit }: ItemManagementClientProps) {
+    const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<Item | null>(null);
 
     const handleAddItem = () => {
         setSelectedItem(null);
-        setIsDialogOpen(true);
+        setIsFormDialogOpen(true);
     };
 
     const handleEditItem = (item: Item) => {
         setSelectedItem(item);
-        setIsDialogOpen(true);
+        setIsFormDialogOpen(true);
     };
     
-    // In a real app, these actions would update the database
-    const handleFormSubmit = (data: Item) => {
-        console.log("Form submitted", data);
-        setIsDialogOpen(false);
+    const handleDeleteClick = (item: Item) => {
+        setSelectedItem(item);
+        setIsDeleteDialogOpen(true);
+    };
+
+    const confirmDelete = () => {
+        if (selectedItem) {
+            onDeleteItem(selectedItem.id);
+        }
+        setIsDeleteDialogOpen(false);
+        setSelectedItem(null);
     }
-    const handleDeleteItem = (id: string) => console.log("Delete item", id);
+
+    const handleFormSubmitAndClose = (data: Item) => {
+        onFormSubmit(data);
+        setIsFormDialogOpen(false);
+    }
+    
     const handleReturnItem = (id: string) => console.log("Return item", id);
 
     return (
@@ -59,16 +76,24 @@ export function ItemManagementClient({ items, title }: ItemManagementClientProps
                 <ItemsTable 
                     items={items} 
                     onEdit={handleEditItem}
-                    onDelete={handleDeleteItem}
+                    onDelete={handleDeleteClick}
                     onReturn={handleReturnItem}
                 />
             </CardContent>
             <ItemFormDialog
-                isOpen={isDialogOpen}
-                setIsOpen={setIsDialogOpen}
+                isOpen={isFormDialogOpen}
+                setIsOpen={setIsFormDialogOpen}
                 item={selectedItem}
-                onSubmit={handleFormSubmit}
+                onSubmit={handleFormSubmitAndClose}
             />
+            {selectedItem && (
+                 <DeleteConfirmationDialog
+                    isOpen={isDeleteDialogOpen}
+                    onOpenChange={setIsDeleteDialogOpen}
+                    onConfirm={confirmDelete}
+                    itemName={selectedItem.name}
+                />
+            )}
         </Card>
     );
 }

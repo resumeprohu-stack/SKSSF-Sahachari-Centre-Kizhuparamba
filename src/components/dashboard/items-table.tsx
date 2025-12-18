@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -28,7 +29,7 @@ import { usePathname } from 'next/navigation';
 interface ItemsTableProps {
   items: Item[];
   onEdit: (item: Item) => void;
-  onDelete: (id: string) => void;
+  onDelete: (item: Item) => void;
   onReturn: (id: string) => void;
 }
 
@@ -105,7 +106,7 @@ export function ItemsTable({ items, onEdit, onDelete, onReturn }: ItemsTableProp
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="text-destructive" onSelect={() => onDelete(item.id)}>
+                  <DropdownMenuItem className="text-destructive" onSelect={() => onDelete(item)}>
                     <Trash2 className="mr-2 h-4 w-4" />
                     Delete
                   </DropdownMenuItem>
