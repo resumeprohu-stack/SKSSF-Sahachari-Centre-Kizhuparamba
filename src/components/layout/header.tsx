@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/items', label: 'Available Items' },
-  { href: '/login', label: 'Admin Login' },
+  { href: '/dashboard', label: 'Dashboard' },
 ];
 
 export function Header() {
