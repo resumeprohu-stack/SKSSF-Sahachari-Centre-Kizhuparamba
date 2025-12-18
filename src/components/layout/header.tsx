@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -7,6 +8,7 @@ import { Menu } from 'lucide-react';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -20,12 +22,23 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white">
-      <div className="container flex h-16 items-center">
-        <div className="mr-6 flex items-center space-x-2">
-          <Link href="/">
-            
-          </Link>
+      <div className="container flex h-16 items-center justify-between">
+        <div className="flex-1">
+          {/* Empty div to balance the flex layout */}
         </div>
+        
+        <div className="flex flex-1 justify-center">
+            <Link href="/" className="flex items-center">
+              <Image 
+                src="/Shachari logo.png" 
+                alt="Sahachari Center Logo" 
+                width={200} 
+                height={50}
+                className="object-contain h-12"
+              />
+            </Link>
+        </div>
+
         <div className="flex flex-1 items-center justify-end space-x-2">
           <nav className="hidden md:flex gap-6">
             {navLinks.map((link) => (
@@ -51,7 +64,13 @@ export function Header() {
             <SheetContent side="right">
               <div className="flex flex-col gap-4 py-6">
                 <Link href="/" className="flex items-center space-x-2 mb-4">
-                  
+                   <Image 
+                    src="/Shachari logo.png" 
+                    alt="Sahachari Center Logo" 
+                    width={180} 
+                    height={45}
+                    className="object-contain h-10"
+                  />
                 </Link>
                 {navLinks.map((link) => (
                   <Link
