@@ -21,9 +21,11 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white">
       <div className="container flex h-16 items-center">
-        <Link href="/" className="mr-6 flex items-center space-x-2">
-          <HelpingHand className="h-6 w-6 text-primary" />
-        </Link>
+        <div className="mr-6 flex items-center space-x-2">
+          <Link href="/">
+            <span className="font-bold font-headline text-primary">Sahachari Center</span>
+          </Link>
+        </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
           <nav className="hidden md:flex gap-6">
             {navLinks.map((link) => (
@@ -49,7 +51,6 @@ export function Header() {
             <SheetContent side="right">
               <div className="flex flex-col gap-4 py-6">
                 <Link href="/" className="flex items-center space-x-2 mb-4">
-                  <HelpingHand className="h-6 w-6 text-primary" />
                   <span className="font-bold font-headline">Sahachari Center</span>
                 </Link>
                 {navLinks.map((link) => (
