@@ -1,13 +1,34 @@
 
+
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Facebook } from 'lucide-react';
+import { Facebook, Phone } from 'lucide-react';
 
 export default function Home() {
 
   return (
     <div className="flex flex-col">
+       <section className="w-full bg-primary/90 text-primary-foreground py-3">
+        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-center gap-4">
+          <p className="font-semibold text-lg">ഉപകരണങ്ങൾക്കായി വിളിക്കുക:</p>
+          <div className="flex items-center gap-4">
+            <Button asChild variant="secondary" size="sm">
+              <a href="tel:9846701479">
+                <Phone className="mr-2 h-4 w-4" />
+                9846701479
+              </a>
+            </Button>
+            <Button asChild variant="secondary" size="sm">
+              <a href="tel:9048311549">
+                <Phone className="mr-2 h-4 w-4" />
+                9048311549
+              </a>
+            </Button>
+          </div>
+        </div>
+      </section>
+
       <section className="relative w-full h-[calc(100vh-4rem)]">
         <Image
           src="/600.jpg"
