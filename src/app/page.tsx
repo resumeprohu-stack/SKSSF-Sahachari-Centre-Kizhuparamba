@@ -12,14 +12,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       <section className="relative w-full h-[60vh] md:h-[80vh] text-white">
-        <Image
-            src="https://picsum.photos/seed/hero/1920/1080"
-            alt="Community support"
-            fill
-            className="object-cover"
-            data-ai-hint="community support"
-            priority
-        />
+        <HeroCarousel images={carouselImages} />
         <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center p-4">
           <h1 className="text-2xl md:text-3xl font-bold font-headline tracking-tight">
             SKSSF
