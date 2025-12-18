@@ -21,46 +21,9 @@ export default function ListOfEquipmentsPage() {
   const issuedItems = items.filter((item) => item.status === 'Issued');
   const repairItems = items.filter((item) => item.status === 'Repair');
 
-  const handleDeleteItem = (itemId: string) => {
-    const updatedItems = items.filter((item) => item.id !== itemId);
-    setItems(updatedItems);
-    toast({
-      title: 'Item Deleted',
-      description: 'The item has been successfully removed.',
-    });
-  };
-
-  const handleAddItem = (item: Omit<Item, 'id' | 'dateAdded'>) => {
-    const newItem: Item = {
-      ...item,
-      id: new Date().toISOString(),
-      dateAdded: new Date().toISOString(),
-    };
-    const updatedItems = [newItem, ...items];
-    setItems(updatedItems);
-    toast({
-      title: 'Item Added',
-      description: `${item.name} has been successfully added.`,
-    });
-  }
-
-  const handleEditItem = (item: Item) => {
-    const updatedItems = items.map(i => i.id === item.id ? item : i);
-    setItems(updatedItems);
-    toast({
-      title: 'Item Updated',
-      description: `${item.name} has been successfully updated.`,
-    });
-  }
-
-  const handleFormSubmit = (data: any) => {
-    if (items.find(i => i.id === data.id)) {
-      handleEditItem(data);
-    } else {
-      handleAddItem(data);
-    }
-  }
-
+  // Dummy handlers, not used in read-only view
+  const handleDeleteItem = () => {};
+  const handleFormSubmit = () => {};
 
   return (
     <div className="flex flex-col gap-6">
@@ -83,6 +46,7 @@ export default function ListOfEquipmentsPage() {
             onDeleteItem={handleDeleteItem}
             onFormSubmit={handleFormSubmit}
             activeTab={activeTab}
+            isReadOnly={true}
           />
         </TabsContent>
         <TabsContent value="available">
@@ -92,6 +56,7 @@ export default function ListOfEquipmentsPage() {
             onDeleteItem={handleDeleteItem}
             onFormSubmit={handleFormSubmit}
             activeTab={activeTab}
+            isReadOnly={true}
           />
         </TabsContent>
         <TabsContent value="issued">
@@ -101,6 +66,7 @@ export default function ListOfEquipmentsPage() {
             onDeleteItem={handleDeleteItem}
             onFormSubmit={handleFormSubmit}
             activeTab={activeTab}
+            isReadOnly={true}
           />
         </TabsContent>
         <TabsContent value="repair">
@@ -110,6 +76,7 @@ export default function ListOfEquipmentsPage() {
                 onDeleteItem={handleDeleteItem}
                 onFormSubmit={handleFormSubmit}
                 activeTab={activeTab}
+                isReadOnly={true}
             />
         </TabsContent>
       </Tabs>

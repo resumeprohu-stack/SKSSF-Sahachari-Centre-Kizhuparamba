@@ -31,11 +31,12 @@ interface ItemsTableProps {
   onEdit: (item: Item) => void;
   onDelete: (item: Item) => void;
   onReturn: (id: string) => void;
+  isReadOnly?: boolean;
 }
 
-export function ItemsTable({ items, onEdit, onDelete, onReturn }: ItemsTableProps) {
+export function ItemsTable({ items, onEdit, onDelete, onReturn, isReadOnly = false }: ItemsTableProps) {
   const pathname = usePathname();
-  const isPublicView = pathname === '/dashboard/item-availability';
+  const readOnly = isReadOnly || pathname === '/dashboard/list-of-equipments';
 
   const isOverdue = (dateString?: string) => {
     if (!dateString) return false;
@@ -52,7 +53,7 @@ export function ItemsTable({ items, onEdit, onDelete, onReturn }: ItemsTableProp
           <TableHead>Status</TableHead>
           <TableHead className="hidden md:table-cell">Date Added</TableHead>
           <TableHead className="hidden md:table-cell">Expected Return</TableHead>
-          {!isPublicView && (
+          {!readOnly && (
             <TableHead>
               <span className="sr-only">Actions</span>
             </TableHead>
@@ -94,7 +95,7 @@ export function ItemsTable({ items, onEdit, onDelete, onReturn }: ItemsTableProp
             <TableCell className="hidden md:table-cell">
               {item.expectedReturnDate ? format(parseISO(item.expectedReturnDate), 'PPP') : 'N/A'}
             </TableCell>
-            {!isPublicView && (
+            {!readOnly && (
                 <TableCell>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>

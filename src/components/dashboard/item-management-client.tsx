@@ -9,6 +9,7 @@ import { ItemsTable } from './items-table';
 import { ItemFormDialog } from './item-form-dialog';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
+import { usePathname } from 'next/navigation';
 
 interface ItemManagementClientProps {
   items: Item[];
@@ -16,30 +17,39 @@ interface ItemManagementClientProps {
   onDeleteItem: (id: string) => void;
   onFormSubmit: (data: Item) => void;
   activeTab: string;
+  isReadOnly?: boolean;
 }
 
-export function ItemManagementClient({ items, title, onDeleteItem, onFormSubmit, activeTab }: ItemManagementClientProps) {
+export function ItemManagementClient({ items, title, onDeleteItem, onFormSubmit, activeTab, isReadOnly = false }: ItemManagementClientProps) {
     const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+    const pathname = usePathname();
+
+    // The component is read-only if the prop is set or if it's on the public page.
+    const readOnly = isReadOnly || pathname === '/dashboard/list-of-equipments';
+
 
     const handleAddItem = () => {
+        if (readOnly) return;
         setSelectedItem(null);
         setIsFormDialogOpen(true);
     };
 
     const handleEditItem = (item: Item) => {
+        if (readOnly) return;
         setSelectedItem(item);
         setIsFormDialogOpen(true);
     };
     
     const handleDeleteClick = (item: Item) => {
+        if (readOnly) return;
         setSelectedItem(item);
         setIsDeleteDialogOpen(true);
     };
 
     const confirmDelete = () => {
-        if (selectedItem) {
+        if (selectedItem && !readOnly) {
             onDeleteItem(selectedItem.id);
         }
         setIsDeleteDialogOpen(false);
@@ -47,6 +57,7 @@ export function ItemManagementClient({ items, title, onDeleteItem, onFormSubmit,
     }
 
     const handleFormSubmitAndClose = (data: Item) => {
+        if (readOnly) return;
         onFormSubmit(data);
         setIsFormDialogOpen(false);
     }
@@ -76,10 +87,12 @@ export function ItemManagementClient({ items, title, onDeleteItem, onFormSubmit,
                         }
                     </CardDescription>
                 </div>
-                <Button size="sm" className="gap-1" onClick={handleAddItem}>
-                    <PlusCircle className="h-4 w-4" />
-                    Add Item
-                </Button>
+                {!readOnly && (
+                    <Button size="sm" className="gap-1" onClick={handleAddItem}>
+                        <PlusCircle className="h-4 w-4" />
+                        Add Item
+                    </Button>
+                )}
             </CardHeader>
             <CardContent>
                 <ItemsTable 
@@ -87,21 +100,26 @@ export function ItemManagementClient({ items, title, onDeleteItem, onFormSubmit,
                     onEdit={handleEditItem}
                     onDelete={handleDeleteClick}
                     onReturn={handleReturnItem}
+                    isReadOnly={readOnly}
                 />
             </CardContent>
-            <ItemFormDialog
-                isOpen={isFormDialogOpen}
-                setIsOpen={setIsFormDialogOpen}
-                item={selectedItem}
-                onSubmit={handleFormSubmitAndClose}
-            />
-            {selectedItem && (
-                 <DeleteConfirmationDialog
-                    isOpen={isDeleteDialogOpen}
-                    onOpenChange={setIsDeleteDialogOpen}
-                    onConfirm={confirmDelete}
-                    itemName={selectedItem.name}
-                />
+            {!readOnly && (
+                <>
+                    <ItemFormDialog
+                        isOpen={isFormDialogOpen}
+                        setIsOpen={setIsFormDialogOpen}
+                        item={selectedItem}
+                        onSubmit={handleFormSubmitAndClose}
+                    />
+                    {selectedItem && (
+                        <DeleteConfirmationDialog
+                            isOpen={isDeleteDialogOpen}
+                            onOpenChange={setIsDeleteDialogOpen}
+                            onConfirm={confirmDelete}
+                            itemName={selectedItem.name}
+                        />
+                    )}
+                </>
             )}
         </Card>
     );
