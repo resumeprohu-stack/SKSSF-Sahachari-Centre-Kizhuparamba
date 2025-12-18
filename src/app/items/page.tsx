@@ -1,7 +1,7 @@
 
 'use client';
 
-import { ItemCard } from '@/components/item-card';
+import { ItemsTable } from '@/components/dashboard/items-table';
 import { useItems } from '@/hooks/use-items';
 import type { Item } from '@/lib/types';
 
@@ -9,7 +9,11 @@ export default function AvailableItemsPage() {
   const { items, isLoading } = useItems();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+        <div className="container py-12 text-center">
+            <p>Loading items...</p>
+        </div>
+    );
   }
   
   const availableItems: Item[] = items.filter(
@@ -28,13 +32,11 @@ export default function AvailableItemsPage() {
       </div>
 
       {availableItems.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {availableItems.map((item) => (
-            <ItemCard key={item.id} item={item} />
-          ))}
+        <div className="border rounded-lg">
+           <ItemsTable items={availableItems} onEdit={() => {}} onDelete={() => {}} onReturn={() => {}} />
         </div>
       ) : (
-        <div className="text-center py-16">
+        <div className="text-center py-16 border rounded-lg">
           <p className="text-xl text-muted-foreground">
             No items are available at the moment. Please check back later.
           </p>
