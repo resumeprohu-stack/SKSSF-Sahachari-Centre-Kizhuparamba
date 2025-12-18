@@ -19,6 +19,18 @@
       "imageHint": "charity donation"
     },
     {
+      "id": "carousel-4",
+      "description": "Volunteers working together.",
+      "imageUrl": "https://images.unsplash.com/photo-1517048676732-d65bc937f952?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx2b2x1bnRlZXJzfGVufDB8fHx8MTc2NjA0NDU4Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "volunteers working"
+    },
+    {
+      "id": "carousel-5",
+      "description": "Helping an elderly person.",
+      "imageUrl": "https://images.unsplash.com/photo-1554163443-345332c237e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxoZWxwaW5nJTIwZWxkZXJseXxlbnwwfHx8fDE3NjYwNDQ1ODZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "helping elderly"
+    },
+    {
       "id": "item-wheelchair",
       "description": "A standard wheelchair.",
       "imageUrl": "https://images.unsplash.com/photo-1570793005299-c091be91bbad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx3aGVlbGNoYWlyfGVufDB8fHx8MTc2NTk2NTY1N3ww&ixlib=rb-4.1.0&q=80&w=1080",
@@ -33,7 +45,7 @@
     {
       "id": "item-bed",
       "description": "A medical bed.",
-      "imageUrl": "https://images.unsplash.com/photo-1710074213374-e68503a1b795?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxtZWRpY2FsJTIwYmVkfGVufDB8fHx8MTc2NjAyNTg0MHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1710074213374-e68503a1b795?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxtZWRpY2FsJTIwYmVkfGVufDB8fHx8MTc2NjAyNTg0MHww&ixlibrb-4.1.0&q=80&w=1080",
       "imageHint": "medical bed"
     },
     {
@@ -45,7 +57,7 @@
     {
       "id": "item-walker",
       "description": "A walker for elderly support.",
-      "imageUrl": "https://images.unsplash.com/photo-1665183161633-6f92b90d9ef2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx3YWxrZXJ8ZW58MHx8fHwxNzY2MDI1ODQwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1665183161633-6f92b90d9ef2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx3YWxrZXJ8ZW58MHx8fHwxNzY2MDI1ODQwfDA&ixlibrb-4.1.0&q=80&w=1080",
       "imageHint": "walker"
     }
   ]
