@@ -39,7 +39,7 @@ const itemSchema = (existingItemCodes: string[] = [], currentItemCode?: string) 
   itemCode: z.string().length(6, 'Item code must be 6 characters')
     .refine(code => /^[a-zA-Z0-9]{6}$/.test(code), 'Item code must be alphanumeric')
     .refine(code => !existingItemCodes.filter(c => c !== currentItemCode).includes(code), 'Item code must be unique'),
-  imageUrl: z.string().url('Must be a valid URL'),
+  imageUrl: z.string().url('Must be a valid URL or data URI'),
   description: z.string().optional(),
   status: z.enum(['Available', 'Issued', 'Repair']),
   dateAdded: z.date({ required_error: 'Date of entry is required' }),
@@ -66,6 +66,7 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
     control,
     reset,
     formState: { errors, isSubmitting },
+    setValue,
   } = useForm<ItemFormData>({
     resolver: zodResolver(currentSchema),
   });
@@ -109,13 +110,8 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
       const reader = new FileReader();
       reader.onloadend = () => {
         const result = reader.result as string;
-        // In a real app, you'd upload this to a server and get a URL.
-        // For now, we'll use a placeholder URL for simplicity.
-        const placeholderUrl = `https://picsum.photos/seed/${Math.random()}/400/300`;
-        (document.getElementById('imageUrl') as HTMLInputElement).value = placeholderUrl;
-        setImagePreview(placeholderUrl);
-        // This programmatically sets the value for react-hook-form
-        reset({ ...control._formValues, imageUrl: placeholderUrl });
+        setValue('imageUrl', result, { shouldValidate: true });
+        setImagePreview(result);
       };
       reader.readAsDataURL(file);
     }
@@ -156,8 +152,8 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
                 </label>
               </Button>
                {/* Hidden input to store URL for form submission */}
-              <Input id="imageUrl" {...register('imageUrl')} type="hidden" />
-              {imagePreview && <img src={imagePreview} alt="Preview" className='mt-2 rounded-md max-h-32'/>}
+              <Input {...register('imageUrl')} type="hidden" />
+              {imagePreview && <img src={imagePreview} alt="Preview" className='mt-2 rounded-md max-h-32 object-contain'/>}
               {errors.imageUrl && <p className="text-destructive text-xs mt-1">{errors.imageUrl.message}</p>}
             </div>
           </div>
