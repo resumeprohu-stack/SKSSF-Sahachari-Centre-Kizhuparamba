@@ -1,4 +1,4 @@
-export type ItemStatus = 'Available' | 'Issued' | 'Returned';
+export type ItemStatus = 'Available' | 'Issued';
 
 export type Item = {
   id: string;

@@ -6,7 +6,6 @@ import type { Item } from '@/lib/types';
 export default function DashboardPage() {
   const totalItems = items.length;
   const issuedItems = items.filter((item) => item.status === 'Issued').length;
-  const returnedItems = items.filter((item) => item.status === 'Returned').length;
   const availableItems = items.filter((item) => item.status === 'Available').length;
   const overdueItems = items.filter(
     (item: Item) =>
@@ -28,7 +27,6 @@ export default function DashboardPage() {
           stats={{
             total: totalItems,
             issued: issuedItems,
-            returned: returnedItems,
             available: availableItems,
             overdue: overdueItems,
           }}

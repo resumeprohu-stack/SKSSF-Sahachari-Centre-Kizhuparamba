@@ -37,7 +37,7 @@ const itemSchema = z.object({
   category: z.string().min(1, 'Category is required'),
   description: z.string().optional(),
   imageUrl: z.string().url('Must be a valid URL'),
-  status: z.enum(['Available', 'Issued', 'Returned']),
+  status: z.enum(['Available', 'Issued']),
   issuedTo: z.string().optional(),
   issueDate: z.date().optional(),
   expectedReturnDate: z.date().optional(),
@@ -143,7 +143,7 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
-                    {(['Available', 'Issued', 'Returned'] as ItemStatus[]).map((status) => (
+                    {(['Available', 'Issued'] as ItemStatus[]).map((status) => (
                       <SelectItem key={status} value={status}>{status}</SelectItem>
                     ))}
                   </SelectContent>

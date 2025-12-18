@@ -6,7 +6,6 @@ export default function ItemManagementPage() {
   const allItems = items;
   const availableItems = items.filter((item) => item.status === 'Available');
   const issuedItems = items.filter((item) => item.status === 'Issued');
-  const returnedItems = items.filter((item) => item.status === 'Returned');
 
   return (
     <div className="flex flex-col gap-6">
@@ -16,11 +15,10 @@ export default function ItemManagementPage() {
         </h1>
       </div>
       <Tabs defaultValue="all">
-        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 md:w-auto">
+        <TabsList className="grid w-full grid-cols-3 md:w-auto">
           <TabsTrigger value="all">All Items</TabsTrigger>
           <TabsTrigger value="available">Available</TabsTrigger>
           <TabsTrigger value="issued">Issued</TabsTrigger>
-          <TabsTrigger value="returned">Returned</TabsTrigger>
         </TabsList>
         <TabsContent value="all">
             <ItemManagementClient items={allItems} title="All Items" />
@@ -30,9 +28,6 @@ export default function ItemManagementPage() {
         </TabsContent>
         <TabsContent value="issued">
             <ItemManagementClient items={issuedItems} title="Issued & Overdue Items"/>
-        </TabsContent>
-        <TabsContent value="returned">
-            <ItemManagementClient items={returnedItems} title="Returned Items"/>
         </TabsContent>
       </Tabs>
     </div>

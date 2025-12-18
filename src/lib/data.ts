@@ -38,12 +38,8 @@ export const items: Item[] = [
     category: 'Medical Equipment',
     description: 'Portable oxygen cylinder with regulator.',
     imageUrl: 'https://picsum.photos/seed/oxygen/400/300',
-    status: 'Returned',
+    status: 'Available',
     dateAdded: formatISO(subDays(new Date(), 90)),
-    issuedTo: 'Muhammed R (234-567-8901)',
-    issueDate: formatISO(subDays(new Date(), 30)),
-    expectedReturnDate: formatISO(subDays(new Date(), 10)),
-    actualReturnDate: formatISO(subDays(new Date(), 9)),
   },
   {
     id: '5',

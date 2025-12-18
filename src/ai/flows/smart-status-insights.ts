@@ -19,7 +19,7 @@ const SmartStatusInsightsInputSchema = z.object({
       issueDate: z.string().optional().describe('The date the item was issued, if applicable.'),
       expectedReturnDate: z.string().optional().describe('The expected return date, if applicable.'),
       actualReturnDate: z.string().optional().describe('The actual return date, if applicable.'),
-      status: z.string().describe('The current status of the item (Available, Issued, Returned).'),
+      status: z.string().describe('The current status of the item (Available, Issued).'),
     })
   ).describe('A list of items with their details.'),
 });
@@ -85,4 +85,4 @@ const smartStatusInsightsFlow = ai.defineFlow(
     const {output} = await smartStatusInsightsPrompt(input);
     return output!;
   }
-); 
+);

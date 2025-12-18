@@ -46,7 +46,6 @@ export function ItemManagementClient({ items, title }: ItemManagementClientProps
                                 "All Items": "A complete list of all resources.",
                                 "Available Items": "Items ready to be issued.",
                                 "Issued & Overdue Items": "Items currently on loan.",
-                                "Returned Items": "Items that have been returned."
                             }[title]
                         }
                     </CardDescription>
