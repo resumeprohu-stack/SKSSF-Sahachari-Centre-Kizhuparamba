@@ -10,9 +10,14 @@ export default function Home() {
   return (
     <div className="flex flex-col">
        <section className="w-full bg-primary/90 text-primary-foreground py-3">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <p className="font-semibold text-lg">ഉപകരണങ്ങൾക്കായി വിളിക്കുക:</p>
+        <div className="container mx-auto px-4 grid grid-cols-3 items-center gap-4">
+          <div className="flex items-center justify-start">
+            <Link href="https://www.facebook.com/profile.php?id=100073117396245" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook">
+               <Image src="/fb.png" alt="Facebook" width={32} height={32} className="hover:opacity-80 transition-opacity" />
+            </Link>
+          </div>
+          <div className="flex items-center justify-center gap-4 col-span-1">
+            <p className="font-semibold text-lg hidden md:block">ഉപകരണങ്ങൾക്കായി വിളിക്കുക:</p>
             <Button asChild variant="secondary" size="sm">
               <a href="tel:9846701479">
                 <Phone className="mr-2 h-4 w-4" />
@@ -26,10 +31,8 @@ export default function Home() {
               </a>
             </Button>
           </div>
-          <div>
-            <Link href="https://www.facebook.com/profile.php?id=100073117396245" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook">
-               <Image src="/fb.png" alt="Facebook" width={32} height={32} className="hover:opacity-80 transition-opacity" />
-            </Link>
+          <div className="flex justify-end">
+            {/* Empty div for spacing */}
           </div>
         </div>
       </section>
