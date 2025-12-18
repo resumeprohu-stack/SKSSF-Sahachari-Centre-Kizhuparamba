@@ -19,7 +19,7 @@ const navLinks = [
   { href: '/dashboard/new-issue', label: 'New Issue', icon: FilePlus },
   { href: '/dashboard/return-item', label: 'Return Item', icon: Undo2 },
   { href: '/dashboard/items', label: 'Item Management', icon: Package },
-  { href: '/items', label: 'Available Items', icon: List },
+  { href: '/items', label: 'Item Availability', icon: List },
   { href: '/dashboard/reports', label: 'Reports', icon: FileText },
 ];
 

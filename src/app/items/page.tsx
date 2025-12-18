@@ -24,7 +24,7 @@ export default function AvailableItemsPage() {
     <div className="container py-12">
       <div className="mb-8 text-center">
         <h1 className="text-4xl font-bold font-headline tracking-tight text-primary">
-          Available Items
+          Item Availability
         </h1>
         <p className="mt-2 text-lg text-muted-foreground">
           Browse the resources currently available for loan from the Sahachari Center.
