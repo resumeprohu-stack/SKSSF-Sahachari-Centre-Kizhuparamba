@@ -18,7 +18,7 @@ import Link from 'next/link';
 import { useItems } from '@/hooks/use-items';
 
 export default function ReturnItemPage() {
-  const { items, setItems, isLoading } = useItems();
+  const { items, handleEditItem, isLoading } = useItems();
   const { toast } = useToast();
   const [isReturnDialogOpen, setIsReturnDialogOpen] = useState(false);
   const [itemToReturn, setItemToReturn] = useState<Item | null>(null);
@@ -54,12 +54,11 @@ export default function ReturnItemPage() {
       expectedReturnDate: undefined,
     };
     
-    const updatedItems = items.map(item => item.id === updatedItem.id ? updatedItem : item);
-    setItems(updatedItems);
+    handleEditItem(updatedItem);
     
     toast({
       title: 'Item Marked as Returned!',
-      description: `${itemToReturn.name} collected by ${data.collectedBy}.`,
+      description: `${itemToReturn.itemName} collected by ${data.collectedBy}.`,
     });
     
     setIsReturnDialogOpen(false);
@@ -90,7 +89,7 @@ export default function ReturnItemPage() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {/* Item Info */}
                     <div className="md:col-span-2 space-y-3">
-                      <h3 className="font-bold text-lg text-primary">{item.name}</h3>
+                      <h3 className="font-bold text-lg text-primary">{item.itemName}</h3>
                       <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
                         <p><strong className="text-muted-foreground">Recipient:</strong> {item.recipientName}</p>
                         <p><strong className="text-muted-foreground">Issuer:</strong> {item.issuerName}</p>

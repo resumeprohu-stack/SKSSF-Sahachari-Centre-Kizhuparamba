@@ -5,12 +5,27 @@ import { StatsCards } from '@/components/dashboard/stats-cards';
 import { SmartStatus } from '@/components/dashboard/smart-status';
 import type { Item } from '@/lib/types';
 import { useItems } from '@/hooks/use-items';
+import { useUser } from '@/firebase';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function DashboardPage() {
   const { items, isLoading } = useItems();
+  const { user, isUserLoading } = useUser();
+  const router = useRouter();
 
-  if (isLoading) {
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      router.push('/login');
+    }
+  }, [user, isUserLoading, router]);
+
+  if (isLoading || isUserLoading) {
     return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return null; // or a login prompt
   }
   
   const totalItems = items.length;

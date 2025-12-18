@@ -12,6 +12,9 @@ import {
   Undo2,
   ListChecks,
 } from 'lucide-react';
+import { useAuth } from '@/firebase';
+import { signOut } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
 
 const navLinks = [
   { href: '/dashboard', label: 'Overview', icon: LayoutDashboard },
@@ -24,6 +27,14 @@ const navLinks = [
 
 export function DashboardNav({ isMobile = false, onLinkClick }: { isMobile?: boolean; onLinkClick?: () => void; }) {
   const pathname = usePathname();
+  const auth = useAuth();
+  const router = useRouter();
+
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    router.push('/login');
+  };
 
   const commonClass = "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary";
   const activeClass = "bg-muted text-primary";
@@ -54,14 +65,16 @@ export function DashboardNav({ isMobile = false, onLinkClick }: { isMobile?: boo
             </Link>
         ))}
          <div className="mt-8">
-            <Link
-                href="/"
-                onClick={onLinkClick}
-                className={cn(commonClass, isMobile ? mobileClass : desktopClass)}
+            <button
+                onClick={() => {
+                  handleLogout();
+                  if (onLinkClick) onLinkClick();
+                }}
+                className={cn(commonClass, isMobile ? mobileClass : desktopClass, 'w-full')}
             >
                 <LogOut className="h-4 w-4" />
                 Logout
-            </Link>
+            </button>
         </div>
     </nav>
   );

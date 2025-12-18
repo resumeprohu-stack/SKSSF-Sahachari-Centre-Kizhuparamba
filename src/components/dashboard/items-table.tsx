@@ -65,15 +65,15 @@ export function ItemsTable({ items, onEdit, onDelete, onReturn, isReadOnly = fal
           <TableRow key={item.id}>
             <TableCell className="hidden sm:table-cell">
               <Image
-                alt={item.name}
+                alt={item.itemName}
                 className="aspect-square rounded-md object-cover"
                 height="64"
                 src={item.imageUrl}
                 width="64"
-                data-ai-hint={item.name}
+                data-ai-hint={item.itemName}
               />
             </TableCell>
-            <TableCell className="font-medium">{item.name}</TableCell>
+            <TableCell className="font-medium">{item.itemName}</TableCell>
             <TableCell>{item.itemCode}</TableCell>
             <TableCell>
               <Badge

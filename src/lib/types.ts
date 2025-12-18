@@ -2,8 +2,10 @@ export type ItemStatus = 'Available' | 'Issued' | 'Repair';
 
 export type Item = {
   id: string;
-  name: string;
+  itemName: string;
+  name: string; // for compatibility
   itemCode: string;
+  category: string;
   description: string;
   imageUrl: string;
   status: ItemStatus;

@@ -23,7 +23,7 @@ export function SmartStatus({ items }: SmartStatusProps) {
     setInsights([]);
 
     const formattedItems = items.map(item => ({
-        itemName: item.name,
+        itemName: item.itemName,
         status: item.status,
         recipientName: item.recipientName,
         issueDate: item.issueDate,

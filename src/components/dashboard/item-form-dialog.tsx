@@ -35,7 +35,7 @@ import { useItems } from '@/hooks/use-items';
 
 const itemSchema = (existingItemCodes: string[] = [], currentItemCode?: string) => z.object({
   id: z.string().optional(),
-  name: z.string().min(3, 'Name must be at least 3 characters'),
+  itemName: z.string().min(3, 'Name must be at least 3 characters'),
   itemCode: z.string().length(6, 'Item code must be 6 characters')
     .refine(code => /^[a-zA-Z0-9]{6}$/.test(code), 'Item code must be alphanumeric')
     .refine(code => !existingItemCodes.filter(c => c !== currentItemCode).includes(code), 'Item code must be unique'),
@@ -43,6 +43,7 @@ const itemSchema = (existingItemCodes: string[] = [], currentItemCode?: string) 
   description: z.string().optional(),
   status: z.enum(['Available', 'Issued', 'Repair']),
   dateAdded: z.date({ required_error: 'Date of entry is required' }),
+  category: z.string().min(1, 'Category is required'),
 });
 
 
@@ -84,12 +85,13 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
         setImagePreview(item.imageUrl);
       } else {
         reset({
-          name: '',
+          itemName: '',
           itemCode: '',
           description: '',
           imageUrl: '',
           status: 'Available',
           dateAdded: new Date(),
+          category: '',
         });
         setImagePreview(null);
       }
@@ -128,10 +130,10 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
         </DialogHeader>
         <form onSubmit={handleSubmit(handleFormSubmit)} className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">Name</Label>
+            <Label htmlFor="itemName" className="text-right">Name</Label>
             <div className="col-span-3">
-              <Input id="name" {...register('name')} />
-              {errors.name && <p className="text-destructive text-xs mt-1">{errors.name.message}</p>}
+              <Input id="itemName" {...register('itemName')} />
+              {errors.itemName && <p className="text-destructive text-xs mt-1">{errors.itemName.message}</p>}
             </div>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
@@ -139,6 +141,13 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
             <div className="col-span-3">
               <Input id="itemCode" {...register('itemCode')} />
               {errors.itemCode && <p className="text-destructive text-xs mt-1">{errors.itemCode.message}</p>}
+            </div>
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="category" className="text-right">Category</Label>
+            <div className="col-span-3">
+              <Input id="category" {...register('category')} />
+              {errors.category && <p className="text-destructive text-xs mt-1">{errors.category.message}</p>}
             </div>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">

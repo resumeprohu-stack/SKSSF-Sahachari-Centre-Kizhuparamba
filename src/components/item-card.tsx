@@ -15,7 +15,7 @@ export function ItemCard({ item }: ItemCardProps) {
         <div className="relative w-full aspect-[4/3]">
           <Image
             src={item.imageUrl}
-            alt={item.name}
+            alt={item.itemName}
             fill
             className="object-cover"
             data-ai-hint={item.category}
@@ -23,7 +23,7 @@ export function ItemCard({ item }: ItemCardProps) {
         </div>
       </CardHeader>
       <CardContent className="flex-grow p-4">
-        <CardTitle className="text-lg font-headline">{item.name}</CardTitle>
+        <CardTitle className="text-lg font-headline">{item.itemName}</CardTitle>
         <p className="text-sm text-muted-foreground mt-1">{item.category}</p>
       </CardContent>
       <CardFooter className="p-4 pt-0">

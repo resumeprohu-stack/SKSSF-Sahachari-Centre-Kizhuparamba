@@ -116,7 +116,7 @@ export function ItemManagementClient({ items, title, onDeleteItem, onFormSubmit,
                             isOpen={isDeleteDialogOpen}
                             onOpenChange={setIsDeleteDialogOpen}
                             onConfirm={confirmDelete}
-                            itemName={selectedItem.name}
+                            itemName={selectedItem.itemName}
                         />
                     )}
                 </>

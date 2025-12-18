@@ -4,13 +4,10 @@
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ItemManagementClient } from '@/components/dashboard/item-management-client';
-import type { Item } from '@/lib/types';
-import { useToast } from '@/hooks/use-toast';
 import { useItems } from '@/hooks/use-items';
 
 export default function ListOfEquipmentsPage() {
-  const { items, setItems, isLoading } = useItems();
-  const { toast } = useToast();
+  const { items, isLoading } = useItems();
   const [activeTab, setActiveTab] = useState('all');
 
   if (isLoading) {

@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ItemManagementClient } from '@/components/dashboard/item-management-client';
 import type { Item } from '@/lib/types';
@@ -9,7 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useItems } from '@/hooks/use-items';
 
 export default function ItemManagementPage() {
-  const { items, setItems, isLoading } = useItems();
+  const { items, isLoading, handleAddItem, handleEditItem, handleDeleteItem } = useItems();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('all');
 
@@ -21,45 +21,29 @@ export default function ItemManagementPage() {
   const issuedItems = items.filter((item) => item.status === 'Issued');
   const repairItems = items.filter((item) => item.status === 'Repair');
 
-  const handleDeleteItem = (itemId: string) => {
-    const updatedItems = items.filter((item) => item.id !== itemId);
-    setItems(updatedItems);
+  const onFormSubmit = (data: any) => {
+    if (data.id) {
+      handleEditItem(data);
+      toast({
+        title: 'Item Updated',
+        description: `${data.itemName} has been successfully updated.`,
+      });
+    } else {
+      handleAddItem(data);
+      toast({
+        title: 'Item Added',
+        description: `${data.itemName} has been successfully added.`,
+      });
+    }
+  };
+
+  const onDeleteConfirm = (itemId: string) => {
+    handleDeleteItem(itemId);
     toast({
       title: 'Item Deleted',
       description: 'The item has been successfully removed.',
     });
   };
-
-  const handleAddItem = (item: Omit<Item, 'id' | 'dateAdded'>) => {
-    const newItem: Item = {
-      ...item,
-      id: new Date().toISOString(),
-      dateAdded: new Date().toISOString(),
-    };
-    const updatedItems = [newItem, ...items];
-    setItems(updatedItems);
-    toast({
-      title: 'Item Added',
-      description: `${item.name} has been successfully added.`,
-    });
-  }
-
-  const handleEditItem = (item: Item) => {
-    const updatedItems = items.map(i => i.id === item.id ? item : i);
-    setItems(updatedItems);
-    toast({
-      title: 'Item Updated',
-      description: `${item.name} has been successfully updated.`,
-    });
-  }
-
-  const handleFormSubmit = (data: any) => {
-    if (items.find(i => i.id === data.id)) {
-      handleEditItem(data);
-    } else {
-      handleAddItem(data);
-    }
-  }
 
 
   return (
@@ -80,8 +64,8 @@ export default function ItemManagementPage() {
           <ItemManagementClient 
             items={items} 
             title="All Items" 
-            onDeleteItem={handleDeleteItem}
-            onFormSubmit={handleFormSubmit}
+            onDeleteItem={onDeleteConfirm}
+            onFormSubmit={onFormSubmit}
             activeTab={activeTab}
           />
         </TabsContent>
@@ -89,8 +73,8 @@ export default function ItemManagementPage() {
           <ItemManagementClient 
             items={availableItems} 
             title="Available Items" 
-            onDeleteItem={handleDeleteItem}
-            onFormSubmit={handleFormSubmit}
+            onDeleteItem={onDeleteConfirm}
+            onFormSubmit={onFormSubmit}
             activeTab={activeTab}
           />
         </TabsContent>
@@ -98,8 +82,8 @@ export default function ItemManagementPage() {
           <ItemManagementClient 
             items={issuedItems} 
             title="Issued & Overdue Items" 
-            onDeleteItem={handleDeleteItem}
-            onFormSubmit={handleFormSubmit}
+            onDeleteItem={onDeleteConfirm}
+            onFormSubmit={onFormSubmit}
             activeTab={activeTab}
           />
         </TabsContent>
@@ -107,8 +91,8 @@ export default function ItemManagementPage() {
             <ItemManagementClient
                 items={repairItems}
                 title="Items Under Repair"
-                onDeleteItem={handleDeleteItem}
-                onFormSubmit={handleFormSubmit}
+                onDeleteItem={onDeleteConfirm}
+                onFormSubmit={onFormSubmit}
                 activeTab={activeTab}
             />
         </TabsContent>

@@ -45,7 +45,7 @@ const issueSchema = z.object({
 type IssueFormData = z.infer<typeof issueSchema>;
 
 export default function NewIssuePage() {
-  const { items, setItems, isLoading } = useItems();
+  const { items, handleEditItem, isLoading } = useItems();
   const { toast } = useToast();
   const [isIssueCalendarOpen, setIssueCalendarOpen] = useState(false);
   const [isReturnCalendarOpen, setReturnCalendarOpen] = useState(false);
@@ -88,12 +88,11 @@ export default function NewIssuePage() {
         actualReturnDate: undefined,
     };
     
-    const updatedItems = items.map(item => item.id === data.itemId ? updatedItem : item);
-    setItems(updatedItems);
+    handleEditItem(updatedItem);
     
     toast({
       title: "Item Issued Successfully!",
-      description: `${itemToUpdate.name} issued to ${data.recipientName} on ${format(data.issueDate, 'PPP')}.`,
+      description: `${itemToUpdate.itemName} issued to ${data.recipientName} on ${format(data.issueDate, 'PPP')}.`,
     });
 
     reset();
@@ -130,7 +129,7 @@ export default function NewIssuePage() {
                       {availableItems.length > 0 ? (
                         availableItems.map((item) => (
                           <SelectItem key={item.id} value={item.id}>
-                            {item.name} - {item.category}
+                            {item.itemName} - {item.category}
                           </SelectItem>
                         ))
                       ) : (
