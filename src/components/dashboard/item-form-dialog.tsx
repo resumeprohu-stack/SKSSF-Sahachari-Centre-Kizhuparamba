@@ -24,7 +24,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import type { Item, ItemStatus } from '@/lib/types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Calendar } from '../ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { CalendarIcon } from 'lucide-react';
@@ -62,6 +62,9 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
   } = useForm<ItemFormData>({
     resolver: zodResolver(itemSchema),
   });
+
+  const [isIssueDateOpen, setIssueDateOpen] = useState(false);
+  const [isReturnDateOpen, setReturnDateOpen] = useState(false);
 
   useEffect(() => {
     if (item) {
@@ -158,7 +161,7 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
               name="issueDate"
               control={control}
               render={({ field }) => (
-                <Popover>
+                <Popover open={isIssueDateOpen} onOpenChange={setIssueDateOpen}>
                     <PopoverTrigger asChild>
                     <Button
                         variant={"outline"}
@@ -175,7 +178,10 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
                     <Calendar
                         mode="single"
                         selected={field.value}
-                        onSelect={field.onChange}
+                        onSelect={(date) => {
+                            field.onChange(date);
+                            setIssueDateOpen(false);
+                        }}
                         initialFocus
                     />
                     </PopoverContent>
@@ -189,7 +195,7 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
               name="expectedReturnDate"
               control={control}
               render={({ field }) => (
-                <Popover>
+                <Popover open={isReturnDateOpen} onOpenChange={setReturnDateOpen}>
                     <PopoverTrigger asChild>
                     <Button
                         variant={"outline"}
@@ -206,7 +212,10 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
                     <Calendar
                         mode="single"
                         selected={field.value}
-                        onSelect={field.onChange}
+                        onSelect={(date) => {
+                            field.onChange(date);
+                            setReturnDateOpen(false);
+                        }}
                         initialFocus
                     />
                     </PopoverContent>
