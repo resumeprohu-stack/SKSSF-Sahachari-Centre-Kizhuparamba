@@ -19,7 +19,7 @@ export default function Home() {
         />
         <div className="absolute inset-0 bg-black/50 z-10"></div>
 
-        <div className="absolute top-4 right-4 z-30">
+        <div className="absolute top-4 left-4 z-30">
           <Link href="https://www.facebook.com/profile.php?id=100073117396245" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook">
              <Image src="/fb.png" alt="Facebook" width={32} height={32} className="hover:opacity-80 transition-opacity" />
           </Link>
