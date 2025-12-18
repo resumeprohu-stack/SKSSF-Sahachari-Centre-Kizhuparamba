@@ -1,7 +1,7 @@
 import { DashboardNav } from '@/components/layout/dashboard-nav';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { Menu, HelpingHand } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import Link from 'next/link';
 
 export default function DashboardLayout({
@@ -39,7 +39,6 @@ export default function DashboardLayout({
             <SheetContent side="left" className="flex flex-col">
                 <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
                     <Link href="/" className="flex items-center gap-2 font-semibold font-headline">
-                    <span className="text-primary">Sahachari Center</span>
                     </Link>
                 </div>
                 <DashboardNav isMobile={true} />
