@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, HelpingHand } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -23,7 +23,7 @@ export function Header() {
       <div className="container flex h-16 items-center">
         <div className="mr-6 flex items-center space-x-2">
           <Link href="/">
-            <span className="font-bold font-headline text-primary">Sahachari Center</span>
+            
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
@@ -51,7 +51,7 @@ export function Header() {
             <SheetContent side="right">
               <div className="flex flex-col gap-4 py-6">
                 <Link href="/" className="flex items-center space-x-2 mb-4">
-                  <span className="font-bold font-headline">Sahachari Center</span>
+                  
                 </Link>
                 {navLinks.map((link) => (
                   <Link
