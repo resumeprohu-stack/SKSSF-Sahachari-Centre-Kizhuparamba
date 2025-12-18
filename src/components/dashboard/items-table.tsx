@@ -48,7 +48,7 @@ export function ItemsTable({ items, onEdit, onDelete, onReturn }: ItemsTableProp
         <TableRow>
           <TableHead className="hidden w-[100px] sm:table-cell">Image</TableHead>
           <TableHead>Name</TableHead>
-          {!isPublicView && <TableHead>Item Code</TableHead>}
+          <TableHead>Item Code</TableHead>
           <TableHead>Status</TableHead>
           <TableHead className="hidden md:table-cell">Date Added</TableHead>
           <TableHead className="hidden md:table-cell">Expected Return</TableHead>
@@ -73,7 +73,7 @@ export function ItemsTable({ items, onEdit, onDelete, onReturn }: ItemsTableProp
               />
             </TableCell>
             <TableCell className="font-medium">{item.name}</TableCell>
-            {!isPublicView && <TableCell>{item.itemCode}</TableCell>}
+            <TableCell>{item.itemCode}</TableCell>
             <TableCell>
               <Badge
                 variant="outline"
