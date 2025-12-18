@@ -17,18 +17,24 @@ interface HeroCarouselProps {
 }
 
 export function HeroCarousel({ images }: HeroCarouselProps) {
+  if (!images || images.length === 0) {
+    return null;
+  }
+
   return (
-    <Carousel
+    <div className="absolute inset-0 w-full h-full">
+      <Carousel
         autoPlay
         infiniteLoop
         showThumbs={false}
         showStatus={false}
+        showIndicators={false}
         interval={5000}
         transitionTime={500}
         className="w-full h-full"
       >
         {images.map((image, index) => (
-          <div key={image.id} className="relative h-full w-full">
+          <div key={image.id} className="w-full h-full">
             <Image
               src={image.imageUrl}
               alt={image.description}
@@ -40,5 +46,6 @@ export function HeroCarousel({ images }: HeroCarouselProps) {
           </div>
         ))}
       </Carousel>
+    </div>
   );
 }
