@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { HeroCarousel } from '@/components/home/hero-carousel';
 import Link from 'next/link';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { placeholderImages as PlaceHolderImages } from '@/lib/placeholder-images.json';
 
 export default function Home() {
   const carouselImages = PlaceHolderImages.filter((image) =>
