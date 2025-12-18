@@ -5,44 +5,76 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAuth, useUser } from "@/firebase";
+import { useAuth, useUser, useFirestore } from "@/firebase";
 import { initiateEmailSignUp } from "@/firebase/non-blocking-login";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import Link from 'next/link';
+import { onAuthStateChanged, User } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates";
 
 const signupSchema = z.object({
+  name: z.string().min(3, { message: "Name must be at least 3 characters long." }),
   email: z.string().email({ message: "Please enter a valid email address." }),
+  mobileNumber: z.string().regex(/^\d{10}$/, { message: "Must be a valid 10-digit mobile number." }),
   password: z.string().min(6, { message: "Password must be at least 6 characters long." }),
 });
 
 export default function SignupPage() {
   const auth = useAuth();
+  const firestore = useFirestore();
   const { user, isUserLoading } = useUser();
   const router = useRouter();
   const { toast } = useToast();
+  
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isUserLoading && user) {
-      router.push('/dashboard');
-    }
-  }, [user, isUserLoading, router]);
+    if (!auth || !firestore) return;
+
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: User | null) => {
+        if (firebaseUser && name && email && mobileNumber) {
+            // User is created and we have the form data, save to Firestore
+            const userRef = doc(firestore, "users", firebaseUser.uid);
+            const userData = {
+                uid: firebaseUser.uid,
+                name,
+                email,
+                mobileNumber,
+                createdAt: new Date().toISOString(),
+            };
+            setDocumentNonBlocking(userRef, userData, { merge: true });
+
+            // Clear form fields after successful registration and data save
+            setName('');
+            setEmail('');
+            setMobileNumber('');
+            setPassword('');
+            
+            // Redirect to dashboard
+            router.push('/dashboard');
+        }
+    });
+
+    return () => unsubscribe();
+  }, [auth, firestore, user, router, name, email, mobileNumber]);
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    const validation = signupSchema.safeParse({ email, password });
+    const validation = signupSchema.safeParse({ name, email, mobileNumber, password });
     if (!validation.success) {
       const firstError = validation.error.errors[0].message;
       setError(firstError);
@@ -55,8 +87,6 @@ export default function SignupPage() {
     }
     
     initiateEmailSignUp(auth, email, password);
-    // The onAuthStateChanged listener in FirebaseProvider will handle the redirect
-    // and potential errors will be caught by the global error handler.
     toast({
         title: "Creating account...",
         description: "Please wait while we set up your account."
@@ -70,13 +100,21 @@ export default function SignupPage() {
           <CardHeader>
             <CardTitle className="text-2xl font-headline">Create an Account</CardTitle>
             <CardDescription>
-              Enter your email and password to sign up.
+              Enter your details to sign up.
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
             <div className="grid gap-2">
+              <Label htmlFor="name">Name</Label>
+              <Input id="name" type="text" placeholder="John Doe" required value={name} onChange={(e) => setName(e.target.value)} />
+            </div>
+            <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" placeholder="m@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="mobileNumber">Mobile Number</Label>
+              <Input id="mobileNumber" type="tel" placeholder="1234567890" required value={mobileNumber} onChange={(e) => setMobileNumber(e.target.value)} />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>

@@ -8,6 +8,7 @@
  * (create, update, delete) to authenticated users designated as 'admins'.
  *
  * ## Data Structure
+ * - `/users/{userId}`: Stores public profile information for registered users.
  * - `/items/{itemId}`: A public collection of all inventory items.
  * - `/items/{itemId}/issuedItems/{issuedItemId}`: A subcollection tracking who has which item.
  * - `/weeklyReports/{weeklyReportId}`: A collection of inventory reports, visible only to admins.
@@ -58,6 +59,32 @@ service cloud.firestore {
      */
     function isAdmin() {
       return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+    }
+    
+    /**
+     * Checks if the request is from the owner of the document.
+     */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // ----------------------------------------------------------------------
+    // Collection: users
+    // ----------------------------------------------------------------------
+    
+    /**
+     * @description Controls access to user profiles. Allows users to create their own
+     *              profile and read public profiles, but only allows owners to update
+     *              or delete their own data.
+     * @path        /users/{userId}
+     * @allow       (create) Any authenticated user can create their own profile.
+     * @deny        (update) A user tries to update another user's profile.
+     * @principle   Enforces owner-only write access for user-specific data.
+     */
+    match /users/{userId} {
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow get: if isSignedIn();
+      allow update, delete: if isOwner(userId);
     }
 
     // ----------------------------------------------------------------------
