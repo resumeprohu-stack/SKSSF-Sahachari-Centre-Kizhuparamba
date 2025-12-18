@@ -1,0 +1,146 @@
+/**
+ * # Firestore Security Rules
+ *
+ * ## Core Philosophy
+ * This ruleset implements a Role-Based Access Control (RBAC) model with a clear distinction
+ * between public and administrative roles. The core principle is to allow public read-access
+ * to the main inventory (`items` collection) while strictly limiting all data modification
+ * (create, update, delete) to authenticated users designated as 'admins'.
+ *
+ * ## Data Structure
+ * - `/items/{itemId}`: A public collection of all inventory items.
+ * - `/items/{itemId}/issuedItems/{issuedItemId}`: A subcollection tracking who has which item.
+ * - `/weeklyReports/{weeklyReportId}`: A collection of inventory reports, visible only to admins.
+ * - `/roles_admin/{userId}`: A protected collection where the existence of a document signifies
+ *   that the user with the corresponding UID has administrative privileges.
+ *
+ * ## Key Security Decisions
+ * - **Admin Role Management**: Admin status is determined by the existence of a document in the
+ *   `/roles_admin/{userId}` collection. This is a fast, secure, and common pattern.
+ * - **Client-Side Role Protection**: The `/roles_admin` collection is intentionally made inaccessible
+ *   to all client-side requests. This is a critical security measure to prevent any user from
+ *   escalating their own privileges. Admin roles must be managed server-side or via the Firebase Console.
+ * - **Public Read, Admin Write**: The main `items` collection is publicly readable by anyone,
+ *   including unauthenticated users. This allows the inventory to be browsed freely. However,
+ *   only admins can add, modify, or remove items.
+ * - **Default Deny**: All paths not explicitly matched are denied access by default.
+ *
+ * ## Denormalization for Authorization
+ * The primary use of denormalization is the `roles_admin` collection. Instead of checking a
+ * field on a user's profile, we use a simple and performant `exists()` call to this dedicated
+ * collection. This avoids slow `get()` calls in rules and provides a single source of truth
+ * for administrative privileges.
+ *
+ * ## Structural Segregation
+ * Data is segregated by its security requirements. Publicly readable inventory data is in the
+ * top-level `items` collection, while sensitive, admin-only data like reports and issue records
+ * are in separate collections or subcollections with stricter rules.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ----------------------------------------------------------------------
+    // Helper Functions
+    // ----------------------------------------------------------------------
+
+    /**
+     * Checks if the user is authenticated.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * Checks if the authenticated user has administrative privileges.
+     * Admin status is granted if a document with the user's UID exists
+     * in the `roles_admin` collection.
+     */
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+    }
+
+    // ----------------------------------------------------------------------
+    // Collection: items
+    // ----------------------------------------------------------------------
+
+    /**
+     * @description Controls access to inventory items. Allows public read access for all
+     *              users, but restricts all write operations to administrators.
+     * @path        /items/{itemId}
+     * @allow       (get) Any user, authenticated or not, can read an item document.
+     * @deny        (create) A non-admin user attempts to add a new item.
+     * @principle   Enforces a "Public Read, Admin Write" access pattern.
+     */
+    match /items/{itemId} {
+      allow get, list: if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin() && resource != null;
+      allow delete: if isAdmin() && resource != null;
+
+      // ----------------------------------------------------------------------
+      // Subcollection: issuedItems
+      // ----------------------------------------------------------------------
+
+      /**
+       * @description Secures records of issued items. All access (read and write) is
+       *              restricted to administrators to protect user information.
+       * @path        /items/{itemId}/issuedItems/{issuedItemId}
+       * @allow       (get) An admin user reads a specific issue record.
+       * @deny        (list) A regular signed-in user tries to list all issued items.
+       * @principle   Restricts access to sensitive data to privileged roles (admins).
+       *              Validates relational integrity between the subcollection document
+       *              and its parent path.
+       */
+      match /issuedItems/{issuedItemId} {
+        allow get, list: if isAdmin();
+        allow create: if isAdmin() && request.resource.data.itemId == itemId;
+        allow update: if isAdmin() && resource != null && request.resource.data.itemId == resource.data.itemId;
+        allow delete: if isAdmin() && resource != null;
+      }
+    }
+
+    // ----------------------------------------------------------------------
+    // Collection: weeklyReports
+    // ----------------------------------------------------------------------
+
+    /**
+     * @description Protects weekly inventory reports. These are considered sensitive
+     *              and are accessible only by administrators.
+     * @path        /weeklyReports/{weeklyReportId}
+     * @allow       (create) An admin user generates and saves a new weekly report.
+     * @deny        (get) A regular signed-in user attempts to read a report.
+     * @principle   Enforces strict role-based access for sensitive or internal data.
+     */
+    match /weeklyReports/{weeklyReportId} {
+      allow get: if isAdmin();
+      allow list: if isAdmin();
+      allow create: if isAdmin();
+      allow update: if isAdmin() && resource != null;
+      allow delete: if isAdmin() && resource != null;
+    }
+
+    // ----------------------------------------------------------------------
+    // Collection: roles_admin
+    // ----------------------------------------------------------------------
+
+    /**
+     * @description Locks down the admin roles collection from any client-side modification.
+     *              This is a critical security rule to prevent privilege escalation.
+     *              Admin roles MUST be managed via a trusted server environment or
+     *              the Firebase Console.
+     * @path        /roles_admin/{userId}
+     * @allow       (none) No client operation is permitted.
+     * @deny        (create) A user attempts to write a document with their own UID to this
+     *              collection to make themselves an admin.
+     * @principle   Prevents client-side privilege escalation by making role data immutable.
+     */
+    match /roles_admin/{userId} {
+      allow get: if false;
+      allow list: if false;
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+  }
+}

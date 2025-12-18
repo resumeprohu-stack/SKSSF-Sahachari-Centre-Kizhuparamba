@@ -1,0 +1,229 @@
+{
+  "entities": {
+    "Item": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Item",
+      "type": "object",
+      "description": "Represents an item in the Sahachari Resource Tracker inventory.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Item entity."
+        },
+        "itemName": {
+          "type": "string",
+          "description": "The name of the item."
+        },
+        "category": {
+          "type": "string",
+          "description": "The category the item belongs to."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the item."
+        },
+        "quantity": {
+          "type": "number",
+          "description": "The number of items currently in inventory."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL of the item's image stored in Firebase Storage.",
+          "format": "uri"
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the item (Available, Issued, Returned, Pending Return)."
+        },
+        "dateAdded": {
+          "type": "string",
+          "description": "The date and time the item was added to the inventory.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "itemName",
+        "category",
+        "description",
+        "quantity",
+        "imageUrl",
+        "status",
+        "dateAdded"
+      ]
+    },
+    "IssuedItem": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "IssuedItem",
+      "type": "object",
+      "description": "Represents an item that has been issued to an individual.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the IssuedItem entity."
+        },
+        "itemId": {
+          "type": "string",
+          "description": "Reference to Item. (Relationship: Item 1:N IssuedItem)"
+        },
+        "issuedToName": {
+          "type": "string",
+          "description": "The name of the person the item was issued to."
+        },
+        "issuedToContact": {
+          "type": "string",
+          "description": "Contact information (e.g., phone number, email) of the person the item was issued to."
+        },
+        "issueDate": {
+          "type": "string",
+          "description": "The date the item was issued.",
+          "format": "date-time"
+        },
+        "expectedReturnDate": {
+          "type": "string",
+          "description": "The expected date for the item to be returned.",
+          "format": "date-time"
+        },
+        "actualReturnDate": {
+          "type": "string",
+          "description": "The actual date the item was returned. Null if not yet returned.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "itemId",
+        "issuedToName",
+        "issuedToContact",
+        "issueDate",
+        "expectedReturnDate"
+      ]
+    },
+    "WeeklyReport": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "WeeklyReport",
+      "type": "object",
+      "description": "Represents a weekly report on inventory activity.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the WeeklyReport entity."
+        },
+        "startDate": {
+          "type": "string",
+          "description": "The start date of the week the report covers.",
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "description": "The end date of the week the report covers.",
+          "format": "date-time"
+        },
+        "totalItemsAdded": {
+          "type": "number",
+          "description": "The total number of items added during the week."
+        },
+        "itemsIssued": {
+          "type": "number",
+          "description": "The number of items issued during the week."
+        },
+        "itemsReturned": {
+          "type": "number",
+          "description": "The number of items returned during the week."
+        },
+        "itemsPendingReturn": {
+          "type": "number",
+          "description": "The number of items pending return at the end of the week."
+        }
+      },
+      "required": [
+        "id",
+        "startDate",
+        "endDate",
+        "totalItemsAdded",
+        "itemsIssued",
+        "itemsReturned",
+        "itemsPendingReturn"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/items/{itemId}",
+        "definition": {
+          "entityName": "Item",
+          "schema": {
+            "$ref": "#/backend/entities/Item"
+          },
+          "description": "Represents items in the inventory. Public read access, admin write access. No denormalized authorization fields are needed as public users can read the collection.",
+          "params": [
+            {
+              "name": "itemId",
+              "description": "Unique identifier for the item."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/items/{itemId}/issuedItems/{issuedItemId}",
+        "definition": {
+          "entityName": "IssuedItem",
+          "schema": {
+            "$ref": "#/backend/entities/IssuedItem"
+          },
+          "description": "Subcollection to track issued items. Includes denormalized 'itemId' for secure rules and reporting.",
+          "params": [
+            {
+              "name": "itemId",
+              "description": "The ID of the parent item."
+            },
+            {
+              "name": "issuedItemId",
+              "description": "Unique identifier for the issued item."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/weeklyReports/{weeklyReportId}",
+        "definition": {
+          "entityName": "WeeklyReport",
+          "schema": {
+            "$ref": "#/backend/entities/WeeklyReport"
+          },
+          "description": "Stores weekly reports on inventory activity. Admin-only access.",
+          "params": [
+            {
+              "name": "weeklyReportId",
+              "description": "Unique identifier for the weekly report."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/roles_admin/{userId}",
+        "definition": {
+          "entityName": "AdminRole",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Collection to store admin roles. Document existence determines admin status.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The UID of the user with admin privileges."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to facilitate a secure and scalable inventory management system for the Sahachari Resource Tracker application. It emphasizes authorization independence through denormalization and structural segregation for clarity and security. The structure uses path-based ownership for user-related data and the membership map pattern for collaborative access where needed.\n\n**Authorization Independence:**  No `get()` calls are required in security rules.  The `items` collection itself doesn't require an `ownerId` or `members` field, as public read access is permitted. The `issuedItems` subcollection includes denormalized fields like the `itemId` to allow for rules to ensure issues are valid and that reporting occurs.  Admin roles are managed through the `roles_admin` collection. This eliminates hierarchical authorization checks, ensuring atomic operations are possible.\n\n**Structural Segregation:** The design separates data with different security postures into distinct collections. The `items` collection is public read, admin write; whereas `/roles_admin` is a secure existence-based admin role check. There is no mixing of public and private data.\n\n**QAPs (Rules are not Filters):** The structure facilitates secure `list` operations by ensuring all documents within a collection share the same security requirements. Public `list` access to `/items` is safe because all items are intended to be readable by all users. Admin `list` access can be secured via DBAC in the `roles_admin` collection."
+  }
+}
