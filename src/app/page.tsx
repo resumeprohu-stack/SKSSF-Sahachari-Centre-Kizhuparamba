@@ -8,7 +8,7 @@ export default function Home() {
     <div className="flex flex-col">
       <section className="relative w-full h-[60vh] md:h-[80vh] text-white">
         <Image
-          src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb21tdW5pdHl8ZW58MHx8fHwxNzY2MDU4MTc0fDA&ixlib=rb-4.1.0&q=80&w=1080"
+          src="/100.jpg"
           alt="Community and unity"
           fill
           className="object-cover"
