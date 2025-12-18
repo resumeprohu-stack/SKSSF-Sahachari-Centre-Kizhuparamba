@@ -1,15 +1,9 @@
 'use client';
 
 import * as React from 'react';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
-import Autoplay from 'embla-carousel-autoplay';
 import Image from 'next/image';
+import { Carousel } from 'react-responsive-carousel';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 type ImagePlaceholder = {
   id: string;
@@ -23,38 +17,28 @@ interface HeroCarouselProps {
 }
 
 export function HeroCarousel({ images }: HeroCarouselProps) {
-  const plugin = React.useRef(
-    Autoplay({ delay: 5000, stopOnInteraction: true })
-  );
-
   return (
     <Carousel
-      plugins={[plugin.current]}
-      className="w-full h-full"
-      onMouseEnter={plugin.current.stop}
-      onMouseLeave={plugin.current.reset}
-      opts={{
-        loop: true,
-      }}
-    >
-      <CarouselContent className="h-full">
-        {images.map((image) => (
-          <CarouselItem key={image.id}>
-            <div className="relative h-full w-full">
-              <Image
-                src={image.imageUrl}
-                alt={image.description}
-                fill
-                className="object-cover"
-                data-ai-hint={image.imageHint}
-                priority={image.id === 'carousel-1'}
-              />
-            </div>
-          </CarouselItem>
+        autoPlay
+        infiniteLoop
+        showThumbs={false}
+        showStatus={false}
+        interval={5000}
+        transitionTime={500}
+        className="w-full h-full"
+      >
+        {images.map((image, index) => (
+          <div key={image.id} className="relative h-full w-full">
+            <Image
+              src={image.imageUrl}
+              alt={image.description}
+              fill
+              className="object-cover"
+              data-ai-hint={image.imageHint}
+              priority={index === 0}
+            />
+          </div>
         ))}
-      </CarouselContent>
-      <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 hidden md:flex" />
-      <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 hidden md:flex" />
-    </Carousel>
+      </Carousel>
   );
 }
