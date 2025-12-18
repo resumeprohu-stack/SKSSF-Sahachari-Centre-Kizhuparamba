@@ -99,11 +99,16 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
   }, [item, reset, isOpen]);
 
   const handleFormSubmit = (data: ItemFormData) => {
-    onSubmit({
+    const submissionData = {
         ...data,
-        id: item?.id, // Keep id for editing
         dateAdded: data.dateAdded.toISOString(),
-    });
+    };
+    if (item?.id) {
+        (submissionData as any).id = item.id;
+    } else {
+        delete (submissionData as any).id;
+    }
+    onSubmit(submissionData);
   }
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
