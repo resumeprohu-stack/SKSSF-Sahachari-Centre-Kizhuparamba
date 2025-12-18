@@ -1,9 +1,18 @@
+
+'use client';
+
 import { ItemCard } from '@/components/item-card';
-import { items as allItems } from '@/lib/data';
+import { useItems } from '@/hooks/use-items';
 import type { Item } from '@/lib/types';
 
 export default function AvailableItemsPage() {
-  const availableItems: Item[] = allItems.filter(
+  const { items, isLoading } = useItems();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  
+  const availableItems: Item[] = items.filter(
     (item) => item.status === 'Available'
   );
 

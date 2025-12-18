@@ -1,9 +1,18 @@
+
+'use client';
+
 import { StatsCards } from '@/components/dashboard/stats-cards';
 import { SmartStatus } from '@/components/dashboard/smart-status';
-import { items } from '@/lib/data';
 import type { Item } from '@/lib/types';
+import { useItems } from '@/hooks/use-items';
 
 export default function DashboardPage() {
+  const { items, isLoading } = useItems();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  
   const totalItems = items.length;
   const issuedItems = items.filter((item) => item.status === 'Issued').length;
   const availableItems = items.filter((item) => item.status === 'Available').length;
@@ -11,7 +20,8 @@ export default function DashboardPage() {
     (item: Item) =>
       item.status === 'Issued' &&
       item.expectedReturnDate &&
-      new Date(item.expectedReturnDate) < new Date()
+      new Date(item.expectedReturnDate) < new Date() &&
+      !item.actualReturnDate
   ).length;
 
 

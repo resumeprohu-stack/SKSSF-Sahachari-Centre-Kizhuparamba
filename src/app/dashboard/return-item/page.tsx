@@ -11,16 +11,21 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Undo2, Phone, MessageCircle } from 'lucide-react';
-import { items } from '@/lib/data';
 import type { Item } from '@/lib/types';
 import { ReturnItemDialog } from '@/components/dashboard/return-item-dialog';
 import { format, parseISO } from 'date-fns';
 import Link from 'next/link';
+import { useItems } from '@/hooks/use-items';
 
 export default function ReturnItemPage() {
+  const { items, setItems, isLoading } = useItems();
   const { toast } = useToast();
   const [isReturnDialogOpen, setIsReturnDialogOpen] = useState(false);
   const [itemToReturn, setItemToReturn] = useState<Item | null>(null);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   const issuedItems = items
     .filter((item) => item.status === 'Issued')
@@ -35,12 +40,28 @@ export default function ReturnItemPage() {
   };
 
   const handleReturnSubmit = (data: { collectedBy: string, returnDate: Date }) => {
-    console.log('Item Returned:', { itemId: itemToReturn?.id, ...data });
+    if (!itemToReturn) return;
+
+    const updatedItem: Item = {
+      ...itemToReturn,
+      status: 'Available',
+      actualReturnDate: data.returnDate.toISOString(),
+      // Optionally clear recipient details upon return
+      recipientName: undefined,
+      recipientMobile: undefined,
+      issuerName: undefined,
+      issueDate: undefined,
+      expectedReturnDate: undefined,
+    };
+    
+    const updatedItems = items.map(item => item.id === updatedItem.id ? updatedItem : item);
+    setItems(updatedItems);
+    
     toast({
       title: 'Item Marked as Returned!',
-      description: `${itemToReturn?.name} collected by ${data.collectedBy}.`,
+      description: `${itemToReturn.name} collected by ${data.collectedBy}.`,
     });
-    // In a real app, you would update the item's status to 'Available' or 'Returned'
+    
     setIsReturnDialogOpen(false);
     setItemToReturn(null);
   };

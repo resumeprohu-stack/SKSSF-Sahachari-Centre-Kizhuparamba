@@ -1,7 +1,16 @@
+
+'use client';
+
 import { ReportsView } from "@/components/dashboard/reports-view";
-import { items } from "@/lib/data";
+import { useItems } from "@/hooks/use-items";
 
 export default function ReportsPage() {
+    const { items, isLoading } = useItems();
+
+    if (isLoading) {
+        return <div>Loading reports...</div>;
+    }
+
     return (
         <div className="flex flex-col gap-6">
             <div className="flex items-center">

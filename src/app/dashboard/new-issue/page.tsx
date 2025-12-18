@@ -25,9 +25,10 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { CalendarIcon, FilePlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
-import { items } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
+import { useItems } from '@/hooks/use-items';
+import { Item } from '@/lib/types';
 
 const issueSchema = z.object({
   itemId: z.string({ required_error: 'Please select an item to issue' }),
@@ -44,6 +45,7 @@ const issueSchema = z.object({
 type IssueFormData = z.infer<typeof issueSchema>;
 
 export default function NewIssuePage() {
+  const { items, setItems, isLoading } = useItems();
   const { toast } = useToast();
   const [isIssueCalendarOpen, setIssueCalendarOpen] = useState(false);
   const [isReturnCalendarOpen, setReturnCalendarOpen] = useState(false);
@@ -58,15 +60,42 @@ export default function NewIssuePage() {
     resolver: zodResolver(issueSchema),
   });
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   const availableItems = items.filter((item) => item.status === 'Available');
 
   const onSubmit = (data: IssueFormData) => {
-    console.log('New Issue Submitted:', data);
+    const itemToUpdate = items.find(item => item.id === data.itemId);
+    if (!itemToUpdate) {
+        toast({
+            variant: 'destructive',
+            title: 'Error issuing item',
+            description: 'The selected item could not be found.',
+        });
+        return;
+    }
+
+    const updatedItem: Item = {
+        ...itemToUpdate,
+        status: 'Issued',
+        recipientName: data.recipientName,
+        recipientMobile: data.mobileNumber,
+        issuerName: data.issuerName,
+        issueDate: data.issueDate.toISOString(),
+        expectedReturnDate: data.expectedReturnDate.toISOString(),
+        actualReturnDate: undefined,
+    };
+    
+    const updatedItems = items.map(item => item.id === data.itemId ? updatedItem : item);
+    setItems(updatedItems);
+    
     toast({
       title: "Item Issued Successfully!",
-      description: `Issued to ${data.recipientName} on ${format(data.issueDate, 'PPP')}.`,
+      description: `${itemToUpdate.name} issued to ${data.recipientName} on ${format(data.issueDate, 'PPP')}.`,
     });
-    // In a real app, you would update the item's status in your database
+
     reset();
   };
 
