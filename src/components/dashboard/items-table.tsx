@@ -25,6 +25,7 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { format, parseISO } from 'date-fns';
 import { usePathname } from 'next/navigation';
+import { useUser } from '@/firebase';
 
 interface ItemsTableProps {
   items: Item[];
@@ -36,7 +37,8 @@ interface ItemsTableProps {
 
 export function ItemsTable({ items, onEdit, onDelete, onReturn, isReadOnly = false }: ItemsTableProps) {
   const pathname = usePathname();
-  const readOnly = isReadOnly || pathname === '/dashboard/list-of-equipments';
+  const { user } = useUser();
+  const readOnly = isReadOnly || pathname === '/dashboard/list-of-equipments' || !user;
 
   const isOverdue = (dateString?: string) => {
     if (!dateString) return false;
