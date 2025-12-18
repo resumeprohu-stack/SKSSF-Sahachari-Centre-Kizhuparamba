@@ -11,6 +11,7 @@ import { useItems } from '@/hooks/use-items';
 export default function ItemManagementPage() {
   const { items, setItems, isLoading } = useItems();
   const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState('all');
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -18,6 +19,7 @@ export default function ItemManagementPage() {
 
   const availableItems = items.filter((item) => item.status === 'Available');
   const issuedItems = items.filter((item) => item.status === 'Issued');
+  const repairItems = items.filter((item) => item.status === 'Repair');
 
   const handleDeleteItem = (itemId: string) => {
     const updatedItems = items.filter((item) => item.id !== itemId);
@@ -67,11 +69,12 @@ export default function ItemManagementPage() {
           Item Management
         </h1>
       </div>
-      <Tabs defaultValue="all">
-        <TabsList className="grid w-full grid-cols-3 md:w-auto">
+      <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid w-full grid-cols-4 md:w-auto">
           <TabsTrigger value="all">All Items</TabsTrigger>
           <TabsTrigger value="available">Available</TabsTrigger>
           <TabsTrigger value="issued">Issued</TabsTrigger>
+          <TabsTrigger value="repair">Under Repair</TabsTrigger>
         </TabsList>
         <TabsContent value="all">
           <ItemManagementClient 
@@ -79,6 +82,7 @@ export default function ItemManagementPage() {
             title="All Items" 
             onDeleteItem={handleDeleteItem}
             onFormSubmit={handleFormSubmit}
+            activeTab={activeTab}
           />
         </TabsContent>
         <TabsContent value="available">
@@ -87,6 +91,7 @@ export default function ItemManagementPage() {
             title="Available Items" 
             onDeleteItem={handleDeleteItem}
             onFormSubmit={handleFormSubmit}
+            activeTab={activeTab}
           />
         </TabsContent>
         <TabsContent value="issued">
@@ -95,7 +100,17 @@ export default function ItemManagementPage() {
             title="Issued & Overdue Items" 
             onDeleteItem={handleDeleteItem}
             onFormSubmit={handleFormSubmit}
+            activeTab={activeTab}
           />
+        </TabsContent>
+        <TabsContent value="repair">
+            <ItemManagementClient
+                items={repairItems}
+                title="Items Under Repair"
+                onDeleteItem={handleDeleteItem}
+                onFormSubmit={handleFormSubmit}
+                activeTab={activeTab}
+            />
         </TabsContent>
       </Tabs>
     </div>

@@ -15,9 +15,10 @@ interface ItemManagementClientProps {
   title: string;
   onDeleteItem: (id: string) => void;
   onFormSubmit: (data: Item) => void;
+  activeTab: string;
 }
 
-export function ItemManagementClient({ items, title, onDeleteItem, onFormSubmit }: ItemManagementClientProps) {
+export function ItemManagementClient({ items, title, onDeleteItem, onFormSubmit, activeTab }: ItemManagementClientProps) {
     const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<Item | null>(null);
@@ -52,6 +53,13 @@ export function ItemManagementClient({ items, title, onDeleteItem, onFormSubmit 
     
     const handleReturnItem = (id: string) => console.log("Return item", id);
 
+    const descriptionMap: { [key: string]: string } = {
+        'all': 'A complete list of all resources.',
+        'available': 'Items ready to be issued.',
+        'issued': 'Items currently on loan.',
+        'repair': 'Items currently under repair.'
+    };
+
     return (
         <Card>
             <CardHeader className='flex-row items-center justify-between'>
@@ -60,9 +68,10 @@ export function ItemManagementClient({ items, title, onDeleteItem, onFormSubmit 
                     <CardDescription>
                         {
                             {
-                                "All Items": "A complete list of all resources.",
-                                "Available Items": "Items ready to be issued.",
-                                "Issued & Overdue Items": "Items currently on loan.",
+                                "All Items": descriptionMap[activeTab],
+                                "Available Items": descriptionMap[activeTab],
+                                "Issued & Overdue Items": descriptionMap[activeTab],
+                                "Items Under Repair": descriptionMap[activeTab]
                             }[title]
                         }
                     </CardDescription>

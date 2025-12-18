@@ -48,8 +48,9 @@ export function ItemsTable({ items, onEdit, onDelete, onReturn }: ItemsTableProp
         <TableRow>
           <TableHead className="hidden w-[100px] sm:table-cell">Image</TableHead>
           <TableHead>Name</TableHead>
+          {!isPublicView && <TableHead>Item Code</TableHead>}
           <TableHead>Status</TableHead>
-          <TableHead className="hidden md:table-cell">Issue Date</TableHead>
+          <TableHead className="hidden md:table-cell">Date Added</TableHead>
           <TableHead className="hidden md:table-cell">Expected Return</TableHead>
           {!isPublicView && (
             <TableHead>
@@ -72,6 +73,7 @@ export function ItemsTable({ items, onEdit, onDelete, onReturn }: ItemsTableProp
               />
             </TableCell>
             <TableCell className="font-medium">{item.name}</TableCell>
+            {!isPublicView && <TableCell>{item.itemCode}</TableCell>}
             <TableCell>
               <Badge
                 variant="outline"
@@ -87,7 +89,7 @@ export function ItemsTable({ items, onEdit, onDelete, onReturn }: ItemsTableProp
               </Badge>
             </TableCell>
             <TableCell className="hidden md:table-cell">
-              {item.issueDate ? format(parseISO(item.issueDate), 'PPP') : 'N/A'}
+              {item.dateAdded ? format(parseISO(item.dateAdded), 'PPP') : 'N/A'}
             </TableCell>
             <TableCell className="hidden md:table-cell">
               {item.expectedReturnDate ? format(parseISO(item.expectedReturnDate), 'PPP') : 'N/A'}
