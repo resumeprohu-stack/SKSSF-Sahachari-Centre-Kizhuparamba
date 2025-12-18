@@ -9,7 +9,6 @@ import { ItemsTable } from './items-table';
 import { ItemFormDialog } from './item-form-dialog';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
-import { usePathname } from 'next/navigation';
 import { useUser } from '@/firebase';
 
 interface ItemManagementClientProps {
@@ -25,11 +24,10 @@ export function ItemManagementClient({ items, title, onDeleteItem, onFormSubmit,
     const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<Item | null>(null);
-    const pathname = usePathname();
     const { user } = useUser();
 
-    // The component is read-only if the prop is set or if it's on the public page.
-    const readOnly = isReadOnly || pathname === '/dashboard/list-of-equipments' || !user;
+    // The component is read-only if the prop is set or if the user is not authenticated.
+    const readOnly = isReadOnly || !user;
 
 
     const handleAddItem = () => {
