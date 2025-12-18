@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -11,7 +10,6 @@ import {
   LogOut,
   FilePlus,
   Undo2,
-  List,
   ListChecks,
 } from 'lucide-react';
 
@@ -21,7 +19,6 @@ const navLinks = [
   { href: '/dashboard/return-item', label: 'Return Item', icon: Undo2 },
   { href: '/dashboard/items', label: 'Item Management', icon: Package },
   { href: '/dashboard/list-of-equipments', label: 'Lists of Equipments', icon: ListChecks },
-  { href: '/dashboard/item-availability', label: 'Item Availability', icon: List },
   { href: '/dashboard/reports', label: 'Reports', icon: FileText },
 ];
 
