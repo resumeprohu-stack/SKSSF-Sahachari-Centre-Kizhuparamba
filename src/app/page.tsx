@@ -11,7 +11,7 @@ export default function Home() {
           src="/600.jpg"
           alt="Community and unity"
           fill
-          className="object-cover"
+          className="object-contain"
           data-ai-hint="community help"
           priority
         />
