@@ -56,9 +56,6 @@ export default function NewIssuePage() {
     formState: { errors, isSubmitting },
   } = useForm<IssueFormData>({
     resolver: zodResolver(issueSchema),
-    defaultValues: {
-      issueDate: new Date(),
-    }
   });
 
   const availableItems = items.filter((item) => item.status === 'Available');
@@ -167,7 +164,7 @@ export default function NewIssuePage() {
                         mode="single"
                         selected={field.value}
                         onSelect={(date) => {
-                          field.onChange(date);
+                          if (date) field.onChange(date);
                           setIssueCalendarOpen(false);
                         }}
                         defaultMonth={field.value}
@@ -207,7 +204,7 @@ export default function NewIssuePage() {
                         mode="single"
                         selected={field.value}
                         onSelect={(date) => {
-                          field.onChange(date);
+                          if (date) field.onChange(date);
                           setReturnCalendarOpen(false);
                         }}
                         defaultMonth={field.value}
