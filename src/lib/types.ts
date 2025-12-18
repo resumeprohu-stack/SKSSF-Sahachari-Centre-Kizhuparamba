@@ -1,9 +1,9 @@
-export type ItemStatus = 'Available' | 'Issued';
+export type ItemStatus = 'Available' | 'Issued' | 'Repair';
 
 export type Item = {
   id: string;
   name: string;
-  category: string;
+  itemCode: string;
   description: string;
   imageUrl: string;
   status: ItemStatus;

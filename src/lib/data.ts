@@ -5,7 +5,7 @@ export const items: Item[] = [
   {
     id: '1',
     name: 'Wheelchair',
-    category: 'Medical Equipment',
+    itemCode: 'WCHR01',
     description: 'Standard wheelchair for mobility assistance.',
     imageUrl: 'https://picsum.photos/seed/wheelchair/400/300',
     status: 'Issued',
@@ -19,7 +19,7 @@ export const items: Item[] = [
   {
     id: '2',
     name: 'Crutches',
-    category: 'Medical Equipment',
+    itemCode: 'CRCH01',
     description: 'A pair of adjustable crutches.',
     imageUrl: 'https://picsum.photos/seed/crutches/400/300',
     status: 'Available',
@@ -28,7 +28,7 @@ export const items: Item[] = [
   {
     id: '3',
     name: 'Hospital Bed',
-    category: 'Medical Furniture',
+    itemCode: 'HOSB01',
     description: 'Adjustable hospital bed for home care.',
     imageUrl: 'https://picsum.photos/seed/medbed/400/300',
     status: 'Available',
@@ -37,7 +37,7 @@ export const items: Item[] = [
   {
     id: '4',
     name: 'Oxygen Cylinder',
-    category: 'Medical Equipment',
+    itemCode: 'OXYC01',
     description: 'Portable oxygen cylinder with regulator.',
     imageUrl: 'https://picsum.photos/seed/oxygen/400/300',
     status: 'Available',
@@ -46,7 +46,7 @@ export const items: Item[] = [
   {
     id: '5',
     name: 'Walker',
-    category: 'Mobility Aid',
+    itemCode: 'WLKR01',
     description: 'Walker for elderly and patient support.',
     imageUrl: 'https://picsum.photos/seed/walker/400/300',
     status: 'Available',
@@ -55,7 +55,7 @@ export const items: Item[] = [
   {
     id: '6',
     name: 'Wheelchair 2',
-    category: 'Medical Equipment',
+    itemCode: 'WCHR02',
     description: 'Standard wheelchair for mobility assistance.',
     imageUrl: 'https://picsum.photos/seed/wheelchair2/400/300',
     status: 'Issued',
@@ -69,7 +69,7 @@ export const items: Item[] = [
   {
     id: '7',
     name: 'Oxygen Concentrator',
-    category: 'Medical Equipment',
+    itemCode: 'OXYC02',
     description: 'Electric oxygen concentrator for home use.',
     imageUrl: 'https://picsum.photos/seed/concentrator/400/300',
     status: 'Issued',

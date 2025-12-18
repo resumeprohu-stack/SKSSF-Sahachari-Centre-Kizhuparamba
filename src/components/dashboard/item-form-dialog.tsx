@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -27,25 +28,23 @@ import type { Item, ItemStatus } from '@/lib/types';
 import { useEffect, useState } from 'react';
 import { Calendar } from '../ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, Upload } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { useItems } from '@/hooks/use-items';
 
-const itemSchema = z.object({
+const itemSchema = (existingItemCodes: string[] = [], currentItemCode?: string) => z.object({
   id: z.string().optional(),
   name: z.string().min(3, 'Name must be at least 3 characters'),
-  category: z.string().min(1, 'Category is required'),
-  description: z.string().optional(),
+  itemCode: z.string().length(6, 'Item code must be 6 characters')
+    .refine(code => /^[a-zA-Z0-9]{6}$/.test(code), 'Item code must be alphanumeric')
+    .refine(code => !existingItemCodes.filter(c => c !== currentItemCode).includes(code), 'Item code must be unique'),
   imageUrl: z.string().url('Must be a valid URL'),
-  status: z.enum(['Available', 'Issued']),
-  recipientName: z.string().optional(),
-  recipientMobile: z.string().optional(),
-  issuerName: z.string().optional(),
-  issueDate: z.date().optional(),
-  expectedReturnDate: z.date().optional(),
+  description: z.string().optional(),
+  status: z.enum(['Available', 'Issued', 'Repair']),
+  dateAdded: z.date({ required_error: 'Date of entry is required' }),
 });
 
-type ItemFormData = z.infer<typeof itemSchema>;
 
 interface ItemFormDialogProps {
   isOpen: boolean;
@@ -55,6 +54,12 @@ interface ItemFormDialogProps {
 }
 
 export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDialogProps) {
+  const { items } = useItems();
+  const existingItemCodes = items.map(i => i.itemCode);
+
+  const currentSchema = itemSchema(existingItemCodes, item?.itemCode);
+  type ItemFormData = z.infer<typeof currentSchema>;
+  
   const {
     register,
     handleSubmit,
@@ -62,48 +67,63 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
     reset,
     formState: { errors, isSubmitting },
   } = useForm<ItemFormData>({
-    resolver: zodResolver(itemSchema),
+    resolver: zodResolver(currentSchema),
   });
-
-  const [isIssueDateOpen, setIssueDateOpen] = useState(false);
-  const [isReturnDateOpen, setReturnDateOpen] = useState(false);
+  
+  const [isDateAddedOpen, setDateAddedOpen] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   useEffect(() => {
-    if (item) {
-      reset({
-        ...item,
-        issueDate: item.issueDate ? new Date(item.issueDate) : undefined,
-        expectedReturnDate: item.expectedReturnDate ? new Date(item.expectedReturnDate) : undefined,
-      });
-    } else {
-      reset({
-        name: '',
-        category: '',
-        description: '',
-        imageUrl: '',
-        status: 'Available',
-        recipientName: '',
-        recipientMobile: '',
-        issuerName: '',
-        issueDate: undefined,
-        expectedReturnDate: undefined,
-      });
+    if (isOpen) {
+      if (item) {
+        reset({
+          ...item,
+          dateAdded: item.dateAdded ? new Date(item.dateAdded) : new Date(),
+        });
+        setImagePreview(item.imageUrl);
+      } else {
+        reset({
+          name: '',
+          itemCode: '',
+          description: '',
+          imageUrl: '',
+          status: 'Available',
+          dateAdded: new Date(),
+        });
+        setImagePreview(null);
+      }
     }
   }, [item, reset, isOpen]);
 
   const handleFormSubmit = (data: ItemFormData) => {
     onSubmit({
         ...data,
-        id: item?.id || new Date().toISOString(),
-        issueDate: data.issueDate?.toISOString(),
-        expectedReturnDate: data.expectedReturnDate?.toISOString(),
-        dateAdded: item?.dateAdded || new Date().toISOString(),
+        id: item?.id, // Keep id for editing
+        dateAdded: data.dateAdded.toISOString(),
     });
   }
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        // In a real app, you'd upload this to a server and get a URL.
+        // For now, we'll use a placeholder URL for simplicity.
+        const placeholderUrl = `https://picsum.photos/seed/${Math.random()}/400/300`;
+        (document.getElementById('imageUrl') as HTMLInputElement).value = placeholderUrl;
+        setImagePreview(placeholderUrl);
+        // This programmatically sets the value for react-hook-form
+        reset({ ...control._formValues, imageUrl: placeholderUrl });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="sm:max-w-[625px]">
+      <DialogContent className="sm:max-w-[525px]">
         <DialogHeader>
           <DialogTitle className='font-headline'>{item ? 'Edit Item' : 'Add New Item'}</DialogTitle>
           <DialogDescription>
@@ -119,16 +139,25 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
             </div>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="category" className="text-right">Category</Label>
+            <Label htmlFor="itemCode" className="text-right">Item Code</Label>
             <div className="col-span-3">
-              <Input id="category" {...register('category')} />
-              {errors.category && <p className="text-destructive text-xs mt-1">{errors.category.message}</p>}
+              <Input id="itemCode" {...register('itemCode')} />
+              {errors.itemCode && <p className="text-destructive text-xs mt-1">{errors.itemCode.message}</p>}
             </div>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="imageUrl" className="text-right">Image URL</Label>
-            <div className="col-span-3">
-              <Input id="imageUrl" {...register('imageUrl')} placeholder="https://picsum.photos/seed/..." />
+            <Label htmlFor="image" className="text-right">Image</Label>
+            <div className='col-span-3'>
+              <Button asChild variant="outline" className='w-full'>
+                <label htmlFor="image-upload" className='cursor-pointer'>
+                  <Upload className="mr-2 h-4 w-4" />
+                  Upload Image
+                  <input id="image-upload" type="file" className="sr-only" onChange={handleImageUpload} accept="image/*" />
+                </label>
+              </Button>
+               {/* Hidden input to store URL for form submission */}
+              <Input id="imageUrl" {...register('imageUrl')} type="hidden" />
+              {imagePreview && <img src={imagePreview} alt="Preview" className='mt-2 rounded-md max-h-32'/>}
               {errors.imageUrl && <p className="text-destructive text-xs mt-1">{errors.imageUrl.message}</p>}
             </div>
           </div>
@@ -147,7 +176,7 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
-                    {(['Available', 'Issued'] as ItemStatus[]).map((status) => (
+                    {(['Available', 'Issued', 'Repair'] as ItemStatus[]).map((status) => (
                       <SelectItem key={status} value={status}>{status}</SelectItem>
                     ))}
                   </SelectContent>
@@ -155,25 +184,13 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
               )}
             />
           </div>
-           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="recipientName" className="text-right">Recipient Name</Label>
-            <Input id="recipientName" {...register('recipientName')} className="col-span-3" placeholder="Name" />
-          </div>
-           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="recipientMobile" className="text-right">Recipient Mobile</Label>
-            <Input id="recipientMobile" {...register('recipientMobile')} className="col-span-3" placeholder="Mobile Number" />
-          </div>
-           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="issuerName" className="text-right">Issuer Name</Label>
-            <Input id="issuerName" {...register('issuerName')} className="col-span-3" placeholder="Name" />
-          </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="issueDate" className="text-right">Issue Date</Label>
+            <Label htmlFor="dateAdded" className="text-right">Date of Entry</Label>
              <Controller
-              name="issueDate"
+              name="dateAdded"
               control={control}
               render={({ field }) => (
-                <Popover open={isIssueDateOpen} onOpenChange={setIssueDateOpen}>
+                <Popover open={isDateAddedOpen} onOpenChange={setDateAddedOpen}>
                     <PopoverTrigger asChild>
                     <Button
                         variant={"outline"}
@@ -192,49 +209,18 @@ export function ItemFormDialog({ isOpen, setIsOpen, item, onSubmit }: ItemFormDi
                         selected={field.value}
                         onSelect={(date) => {
                             if(date) field.onChange(date);
-                            setIssueDateOpen(false);
+                            setDateAddedOpen(false);
                         }}
                         initialFocus
+                        disabled={(date) => date > new Date()}
                     />
                     </PopoverContent>
                 </Popover>
               )}
             />
+             {errors.dateAdded && <p className="text-destructive text-xs mt-1">{errors.dateAdded.message}</p>}
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="expectedReturnDate" className="text-right">Expected Return</Label>
-             <Controller
-              name="expectedReturnDate"
-              control={control}
-              render={({ field }) => (
-                <Popover open={isReturnDateOpen} onOpenChange={setReturnDateOpen}>
-                    <PopoverTrigger asChild>
-                    <Button
-                        variant={"outline"}
-                        className={cn(
-                        "w-full col-span-3 justify-start text-left font-normal",
-                        !field.value && "text-muted-foreground"
-                        )}
-                    >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
-                    </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                    <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={(date) => {
-                            if(date) field.onChange(date);
-                            setReturnDateOpen(false);
-                        }}
-                        initialFocus
-                    />
-                    </PopoverContent>
-                </Popover>
-              )}
-            />
-          </div>
+
           <DialogFooter>
             <DialogClose asChild>
               <Button type="button" variant="secondary">Cancel</Button>

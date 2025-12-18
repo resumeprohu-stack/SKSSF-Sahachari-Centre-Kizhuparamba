@@ -64,7 +64,7 @@ export function ItemsTable({ items, onEdit, onDelete, onReturn }: ItemsTableProp
                 height="64"
                 src={item.imageUrl}
                 width="64"
-                data-ai-hint={item.category}
+                data-ai-hint={item.name}
               />
             </TableCell>
             <TableCell className="font-medium">{item.name}</TableCell>
@@ -74,6 +74,7 @@ export function ItemsTable({ items, onEdit, onDelete, onReturn }: ItemsTableProp
                 className={cn(
                     item.status === 'Available' && 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900/50 dark:text-green-300 dark:border-green-800',
                     item.status === 'Issued' && 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/50 dark:text-yellow-300 dark:border-yellow-800',
+                    item.status === 'Repair' && 'bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900/50 dark:text-orange-300 dark:border-orange-800',
                     isOverdue(item.expectedReturnDate) && item.status === 'Issued' && 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900/50 dark:text-red-300 dark:border-red-800',
                     "capitalize"
                   )}

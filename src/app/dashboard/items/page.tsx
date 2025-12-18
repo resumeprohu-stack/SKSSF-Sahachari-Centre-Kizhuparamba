@@ -3,7 +3,6 @@
 
 import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { items as initialItems } from '@/lib/data';
 import { ItemManagementClient } from '@/components/dashboard/item-management-client';
 import type { Item } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
@@ -29,8 +28,13 @@ export default function ItemManagementPage() {
     });
   };
 
-  const handleAddItem = (item: Item) => {
-    const updatedItems = [item, ...items];
+  const handleAddItem = (item: Omit<Item, 'id' | 'dateAdded'>) => {
+    const newItem: Item = {
+      ...item,
+      id: new Date().toISOString(),
+      dateAdded: new Date().toISOString(),
+    };
+    const updatedItems = [newItem, ...items];
     setItems(updatedItems);
     toast({
       title: 'Item Added',
@@ -47,7 +51,7 @@ export default function ItemManagementPage() {
     });
   }
 
-  const handleFormSubmit = (data: Item) => {
+  const handleFormSubmit = (data: any) => {
     if (items.find(i => i.id === data.id)) {
       handleEditItem(data);
     } else {
